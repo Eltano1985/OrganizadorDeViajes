@@ -1,126 +1,134 @@
 /* Estilos Generales */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background-color: #f4f4f4;
-  }
-  
-  header {
-    background-color: #4CAF50;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-  }
-  
-  main {
-    padding: 2rem;
-  }
-  
-  h1, h2 {
-    margin-bottom: 1rem;
-  }
-  
-  /* Formulario de planificación */
-  #trip-form {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
-  }
-  
-  #trip-form form div {
-    margin-bottom: 1rem;
-  }
-  
-  #trip-form label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-  
-  #trip-form input, #trip-form textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  #trip-form button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 0.7rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  #trip-form button:hover {
-    background-color: #45a049;
-  }
-  
-  /* Sección de Itinerario */
-  #itinerary {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  #itinerary-list {
-    margin-top: 1rem;
-  }
-  
-  footer {
-    text-align: center;
-    padding: 1rem;
-    background-color: #4CAF50;
-    color: white;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f4f4f4;
+  display: flex;
+  flex-direction: column; /* Para apilar header, main y footer */
+}
 
-  /* Estilos para cada itinerario */
+header {
+  background-color: #4CAF50;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  width: 100%;
+}
+
+main {
+  display: flex; /* Cambiado para usar Flexbox */
+  flex: 1; /* Para que el main ocupe todo el espacio restante */
+  padding: 2rem;
+}
+
+#trip-form {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 2rem; /* Espacio a la derecha del formulario */
+  flex: 1; /* Para que ocupe el espacio restante a la izquierda */
+}
+
+#map-section {
+  flex: 1; /* Para que ocupe el espacio a la derecha */
+  margin-top: 2rem; /* Margen superior para el mapa */
+}
+
+#map {
+  width: 100%;
+  height: 400px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para encabezados */
+h1, h2 {
+  margin-bottom: 1rem;
+}
+
+/* Formulario de planificación */
+#trip-form form div {
+  margin-bottom: 1rem;
+}
+
+#trip-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+#trip-form input, #trip-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#trip-form button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#trip-form button:hover {
+  background-color: #45a049;
+}
+
+/* Sección de Itinerario */
+#itinerary {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#itinerary-list {
+  margin-top: 1rem;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #4CAF50;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Estilos para cada itinerario */
 .itinerary-item {
-    background-color: #fff;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  
-  .itinerary-item h3 {
-    margin-top: 0;
-  }
-  
-  .delete-btn {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 1rem;
-  }
-  
-  .delete-btn:hover {
-    background-color: #ff1a1a;
-  }
+  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
 
-  #map-section {
-    margin-top: 2rem;
-  }
-  
-  #map {
-    width: 100%;
-    height: 400px;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  
+.itinerary-item h3 {
+  margin-top: 0;
+}
+
+.delete-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.delete-btn:hover {
+  background-color: #ff1a1a;
+}
+
   
   
