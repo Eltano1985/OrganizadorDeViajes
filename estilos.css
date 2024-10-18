@@ -154,3 +154,8 @@ footer {
     padding: 0.5rem; /* Reducir padding en header y footer */
   }
 }
+
+#qr-code {
+  text-align: center; /* Centra el QR en el footer */
+  margin-top: 1rem; /* Espacio encima del QR */
+}

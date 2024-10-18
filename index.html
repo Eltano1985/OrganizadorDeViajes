@@ -6,6 +6,8 @@
     <title>Planificador de Viajes</title>
     <link rel="stylesheet" href="estilos.css"> <!-- Enlace a tu archivo CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" /> <!-- CSS de Leaflet -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script> <!-- QRCode.js -->
 </head>
 <body>
     <header>
@@ -29,23 +31,33 @@
                 </div>
                 <div>
                     <label for="activities">Actividades</label>
-                    <div id="activities-list"></div> <!-- Nueva lista de actividades -->
-                    <div id="selection-error" style="color: red; display: none;">Puedes seleccionar hasta 10 lugares.</div>
+                    <textarea id="activities" name="activities" rows="4" required></textarea>
                 </div>
-                <button type="submit" id="plan-trip-btn" disabled>Planificar Viaje</button>
+                <button type="submit">Planificar Viaje</button>
             </form>
             <div id="itinerary-list"></div> <!-- Lista de itinerarios -->
         </div>
         <div id="map-section">
             <h2>Mapa</h2>
-            <div id="map" style="height: 400px;"></div> <!-- Establecer una altura para el mapa -->
+            <div id="map"></div>
         </div>
     </main>
     <footer>
         <p>© 2024 Planificador de Viajes</p>
+        <div id="qr-code"></div> <!-- Contenedor para el QR Code -->
     </footer>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> <!-- JS de Leaflet -->
-    <script type="module" src="OrganizadorDeViajes.js"></script> <!-- Enlace a tu archivo JavaScript -->
+    <script type = "module" src="OrganizadorDeViajes.js"></script> <!-- Enlace a tu archivo JavaScript -->
+    <script>
+        // Generar el código QR cuando se carga la página
+        $(document).ready(function() {
+            const appUrl = "https://eltano1985.github.io/OrganizadorDeViajes/"; // Cambia esta URL a la dirección de tu aplicación
+            $("#qr-code").qrcode({
+                text: appUrl,
+                width: 128, // Ancho del código QR
+                height: 128 // Alto del código QR
+            });
+        });
+    </script>
 </body>
 </html>
-
