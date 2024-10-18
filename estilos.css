@@ -130,5 +130,27 @@ footer {
   background-color: #ff1a1a;
 }
 
-  
-  
+/* Media Queries para adaptabilidad en móviles */
+@media (max-width: 768px) {
+  main {
+    flex-direction: column; /* Cambiar a columna en pantallas pequeñas */
+    padding: 1rem; /* Reducir el padding */
+  }
+
+  #trip-form {
+    margin-right: 0; /* Eliminar margen derecho */
+    margin-bottom: 2rem; /* Espacio entre formulario y mapa */
+  }
+
+  #map-section {
+    margin-top: 1rem; /* Reducir margen superior para móviles */
+  }
+
+  #map {
+    height: 300px; /* Ajustar la altura del mapa en móviles */
+  }
+
+  header, footer {
+    padding: 0.5rem; /* Reducir padding en header y footer */
+  }
+}
