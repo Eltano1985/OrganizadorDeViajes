@@ -7,3 +7,4 @@ import TripPlanner from "./TripPlanner.js";
 document.addEventListener('DOMContentLoaded', () => {
   const tripPlanner = new TripPlanner('map');
 });
+
