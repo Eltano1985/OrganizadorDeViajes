@@ -29,15 +29,16 @@
                 </div>
                 <div>
                     <label for="activities">Actividades</label>
-                    <textarea id="activities" name="activities" rows="4" required></textarea>
+                    <div id="activities-list"></div> <!-- Nueva lista de actividades -->
+                    <div id="selection-error" style="color: red; display: none;">Puedes seleccionar hasta 10 lugares.</div>
                 </div>
-                <button type="submit">Planificar Viaje</button>
+                <button type="submit" id="plan-trip-btn" disabled>Planificar Viaje</button>
             </form>
             <div id="itinerary-list"></div> <!-- Lista de itinerarios -->
         </div>
         <div id="map-section">
             <h2>Mapa</h2>
-            <div id="map"></div>
+            <div id="map" style="height: 400px;"></div> <!-- Establecer una altura para el mapa -->
         </div>
     </main>
     <footer>
@@ -47,3 +48,4 @@
     <script src="OrganizadorDeViajes.js"></script> <!-- Enlace a tu archivo JavaScript -->
 </body>
 </html>
+
