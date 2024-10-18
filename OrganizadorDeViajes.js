@@ -19,6 +19,11 @@ class MapHandler {
       this.marker = L.marker([lat, lon]).addTo(this.map).bindPopup(`Destino: ${destination}`).openPopup();
   }
 
+  addActivityMarker(lat, lon, placeName) {
+      // Añadir un marcador para actividades seleccionadas
+      L.marker([lat, lon]).addTo(this.map).bindPopup(placeName);
+  }
+
   setView(lat, lon) {
       this.map.setView([lat, lon], 12);
   }
@@ -47,6 +52,7 @@ class TripPlanner {
       this.selectionError = document.getElementById('selection-error');
 
       this.selectedPlaces = [];
+      this.activitiesCoordinates = []; // Array para almacenar coordenadas de actividades
       this.bindEvents();
   }
 
@@ -69,6 +75,7 @@ class TripPlanner {
       this.activitiesList.innerHTML = '';
       this.planTripBtn.disabled = true;
       this.selectedPlaces = [];
+      this.activitiesCoordinates = []; // Resetear las coordenadas al finalizar el viaje
   }
 
   createItineraryItem(destination, startDate, endDate, activities) {
@@ -126,13 +133,21 @@ class TripPlanner {
   }
 
   displayActivities(places) {
+      this.activitiesCoordinates = []; // Limpiar coordenadas antes de mostrar nuevas
+
       places.slice(0, 10).forEach((place, index) => {
           const placeName = place.tags.name || `Lugar sin nombre ${index + 1}`;
+          const lat = place.lat || 0; // Extraer latitud
+          const lon = place.lon || 0; // Extraer longitud
+          
+          // Guardar coordenadas del lugar
+          this.activitiesCoordinates.push({ name: placeName, lat: lat, lon: lon });
+
           const checkbox = document.createElement('input');
           checkbox.type = 'checkbox';
           checkbox.value = placeName;
           checkbox.id = `place-${index}`;
-          checkbox.addEventListener('change', () => this.handleCheckboxChange(checkbox));
+          checkbox.addEventListener('change', () => this.handleCheckboxChange(checkbox, lat, lon));
 
           const label = document.createElement('label');
           label.htmlFor = `place-${index}`;
@@ -146,11 +161,12 @@ class TripPlanner {
       });
   }
 
-  handleCheckboxChange(checkbox) {
+  handleCheckboxChange(checkbox, lat, lon) {
       if (checkbox.checked) {
           if (this.selectedPlaces.length < 10) {
               this.selectedPlaces.push(checkbox.value);
               this.selectionError.style.display = 'none';
+              this.mapHandler.addActivityMarker(lat, lon, checkbox.value); // Añadir marcador en el mapa
           } else {
               checkbox.checked = false;
               this.selectionError.style.display = 'block';
