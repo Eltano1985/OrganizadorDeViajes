@@ -89,7 +89,11 @@ h1, h2 {
 }
 
 #itinerary-list {
+  display: flex; /* Para que los itinerarios se muestren uno al lado del otro */
+  flex-wrap: wrap; /* Permite que los elementos se ajusten a nuevas filas si no hay espacio */
+  gap: 20px; /* Espacio entre los elementos del itinerario */
   margin-top: 1rem;
+  justify-content: flex-start; /* Alinea los itinerarios al inicio */
 }
 
 footer {
@@ -106,10 +110,15 @@ footer {
 .itinerary-item {
   background-color: #fff;
   padding: 1rem;
-  margin-bottom: 1rem;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  flex: 1 1 300px; /* Flex-grow, flex-shrink y tamaño base: los elementos crecen y se ajustan */
+  max-width: 300px; /* Ancho máximo para cada itinerario */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .itinerary-item h3 {
@@ -152,6 +161,15 @@ footer {
 
   header, footer {
     padding: 0.5rem; /* Reducir padding en header y footer */
+  }
+
+  #itinerary-list {
+    flex-direction: column; /* Cambiar a columna en pantallas pequeñas */
+  }
+
+  .itinerary-item {
+    flex: 1 1 100%; /* Los itinerarios ocuparán el 100% del ancho en pantallas pequeñas */
+    max-width: 100%;
   }
 }
 
