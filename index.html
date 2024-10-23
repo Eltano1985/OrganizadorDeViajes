@@ -29,25 +29,30 @@
                     <label for="end-date">Fecha de Llegada</label>
                     <input type="date" id="end-date" name="end-date" required>
                 </div>
-                <div>
-                    <label for="activities">Actividades</label>
-                    <textarea id="activities" name="activities" rows="4" required></textarea>
-                </div>
-                <button type="submit">Planificar Viaje</button>
+                <!-- Botón para planificar el viaje (habilitado solo cuando hay actividades seleccionadas) -->
+                <button id="plan-trip-btn" type="submit" disabled>Planificar Viaje</button>
             </form>
             <div id="itinerary-list"></div> <!-- Lista de itinerarios -->
         </div>
+
+        <div id="activities-section">
+            <h2>Actividades sugeridas</h2>
+            <div id="activities-list"></div> <!-- Aquí se desplegarán las actividades -->
+            <div id="selection-error" style="display: none; color: red;">Has alcanzado el límite de 10 actividades.</div>
+        </div>
+
         <div id="map-section">
             <h2>Mapa</h2>
-            <div id="map"></div>
+            <div id="map" style="height: 400px;"></div> <!-- Establecer altura para el mapa -->
         </div>
     </main>
     <footer>
         <p>© 2024 Planificador de Viajes</p>
         <div id="qr-code"></div> <!-- Contenedor para el QR Code -->
     </footer>
+
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> <!-- JS de Leaflet -->
-    <script type = "module" src="OrganizadorDeViajes.js"></script> <!-- Enlace a tu archivo JavaScript -->
+    <script type="module" src="OrganizadorDeViajes.js"></script> <!-- Enlace a tu archivo JavaScript -->
     <script>
         // Generar el código QR cuando se carga la página
         $(document).ready(function() {
@@ -61,4 +66,3 @@
     </script>
 </body>
 </html>
-

@@ -65,6 +65,7 @@ class TripPlanner {
                     const lon = data[0].lon;
                     this.mapHandler.setView(lat, lon);
                     this.mapHandler.addMarker(lat, lon, destination);
+                    this.activitiesList.innerHTML = ''; // Limpiar actividades anteriores
                     this.fetchActivities(lat, lon);
                 } else {
                     alert('No se encontró el destino.');
@@ -77,9 +78,10 @@ class TripPlanner {
     }
   
     fetchActivities(lat, lon) {
+        this.activitiesList.innerHTML = '<p>Cargando actividades...</p>'; // Mostrar mensaje de carga
         ActivityFetcher.fetchActivities(lat, lon)
             .then(data => {
-                this.activitiesList.innerHTML = '';
+                this.activitiesList.innerHTML = ''; // Limpiar el mensaje de carga
                 if (data.elements.length > 0) {
                     this.displayActivities(data.elements);
                 } else {
@@ -151,5 +153,4 @@ class TripPlanner {
     }
 }
 
-export default TripPlanner
-  
+export default TripPlanner;
