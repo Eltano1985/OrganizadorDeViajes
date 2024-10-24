@@ -14,36 +14,37 @@
         <h1>Planificador de Viajes</h1>
     </header>
     <main>
-        <div id="trip-form">
-            <h2>Formulario de Planificación</h2>
-            <form id="itinerary-form">
-                <div>
-                    <label for="destination">Destino</label>
-                    <input type="text" id="destination" name="destination" required>
-                </div>
-                <div>
-                    <label for="start-date">Fecha de Salida</label>
-                    <input type="date" id="start-date" name="start-date" required>
-                </div>
-                <div>
-                    <label for="end-date">Fecha de Llegada</label>
-                    <input type="date" id="end-date" name="end-date" required>
-                </div>
-                <!-- Botón para planificar el viaje (habilitado solo cuando hay actividades seleccionadas) -->
-                <button id="plan-trip-btn" type="submit" disabled>Planificar Viaje</button>
-            </form>
-            <div id="itinerary-list"></div> <!-- Lista de itinerarios -->
-        </div>
+        <div id="trip-planner">
+            <div id="trip-form">
+                <h2>Formulario de Planificación</h2>
+                <form id="itinerary-form">
+                    <div>
+                        <label for="destination">Destino</label>
+                        <input type="text" id="destination" name="destination" required>
+                    </div>
+                    <div>
+                        <label for="start-date">Fecha de Salida</label>
+                        <input type="date" id="start-date" name="start-date" required>
+                    </div>
+                    <div>
+                        <label for="end-date">Fecha de Llegada</label>
+                        <input type="date" id="end-date" name="end-date" required>
+                    </div>
+                    <button id="plan-trip-btn" type="submit" disabled>Planificar Viaje</button>
+                </form>
+                <div id="itinerary-list"></div> <!-- Lista de itinerarios -->
+            </div>
 
-        <div id="activities-section">
-            <h2>Actividades sugeridas</h2>
-            <div id="activities-list"></div> <!-- Aquí se desplegarán las actividades -->
-            <div id="selection-error" style="display: none; color: red;">Has alcanzado el límite de 10 actividades.</div>
-        </div>
+            <div id="activities-section">
+                <h2>Actividades sugeridas</h2>
+                <div id="activities-list"></div> <!-- Aquí se desplegarán las actividades -->
+                <div id="selection-error" style="display: none; color: red;">Has alcanzado el límite de 10 actividades.</div>
+            </div>
 
-        <div id="map-section">
-            <h2>Mapa</h2>
-            <div id="map" style="height: 400px;"></div> <!-- Establecer altura para el mapa -->
+            <div id="map-section">
+                <h2>Mapa</h2>
+                <div id="map" style="height: 400px;"></div> <!-- Establecer altura para el mapa -->
+            </div>
         </div>
     </main>
     <footer>

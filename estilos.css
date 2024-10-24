@@ -18,23 +18,30 @@ header {
 }
 
 main {
-  display: flex; /* Cambiado para usar Flexbox */
   flex: 1; /* Para que el main ocupe todo el espacio restante */
   padding: 2rem;
 }
 
-#trip-form {
+/* Contenedor principal para alinear las secciones */
+#trip-planner {
+  display: flex;
+  justify-content: space-between; /* Espacio entre los elementos */
+  align-items: flex-start; /* Alinear los elementos arriba */
+  gap: 2rem; /* Espacio entre las columnas */
+}
+
+/* Estilos para cada sección (formulario, actividades, mapa) */
+#trip-form, #activities-section, #map-section {
+  flex: 1; /* Que cada sección ocupe el mismo espacio */
   background-color: white;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-right: 2rem; /* Espacio a la derecha del formulario */
-  flex: 1; /* Para que ocupe el espacio restante a la izquierda */
 }
 
+/* Ajustes específicos para el mapa */
 #map-section {
-  flex: 1; /* Para que ocupe el espacio a la derecha */
-  margin-top: 2rem; /* Margen superior para el mapa */
+  flex: 1.5; /* Dale más espacio al mapa */
 }
 
 #map {
@@ -89,13 +96,14 @@ h1, h2 {
 }
 
 #itinerary-list {
-  display: flex; /* Para que los itinerarios se muestren uno al lado del otro */
-  flex-wrap: wrap; /* Permite que los elementos se ajusten a nuevas filas si no hay espacio */
-  gap: 20px; /* Espacio entre los elementos del itinerario */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
   margin-top: 1rem;
-  justify-content: flex-start; /* Alinea los itinerarios al inicio */
+  justify-content: flex-start;
 }
 
+/* Footer */
 footer {
   text-align: center;
   padding: 1rem;
@@ -113,8 +121,8 @@ footer {
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  flex: 1 1 300px; /* Flex-grow, flex-shrink y tamaño base: los elementos crecen y se ajustan */
-  max-width: 300px; /* Ancho máximo para cada itinerario */
+  flex: 1 1 300px;
+  max-width: 300px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -139,41 +147,32 @@ footer {
   background-color: #ff1a1a;
 }
 
+/* Estilos del QR Code */
+#qr-code {
+  text-align: center;
+  margin-top: 1rem;
+}
+
 /* Media Queries para adaptabilidad en móviles */
 @media (max-width: 768px) {
-  main {
+  #trip-planner {
     flex-direction: column; /* Cambiar a columna en pantallas pequeñas */
-    padding: 1rem; /* Reducir el padding */
-  }
-
-  #trip-form {
-    margin-right: 0; /* Eliminar margen derecho */
-    margin-bottom: 2rem; /* Espacio entre formulario y mapa */
   }
 
   #map-section {
-    margin-top: 1rem; /* Reducir margen superior para móviles */
-  }
-
-  #map {
-    height: 300px; /* Ajustar la altura del mapa en móviles */
+    margin-top: 2rem;
   }
 
   header, footer {
-    padding: 0.5rem; /* Reducir padding en header y footer */
+    padding: 0.5rem;
   }
 
   #itinerary-list {
-    flex-direction: column; /* Cambiar a columna en pantallas pequeñas */
+    flex-direction: column;
   }
 
   .itinerary-item {
-    flex: 1 1 100%; /* Los itinerarios ocuparán el 100% del ancho en pantallas pequeñas */
+    flex: 1 1 100%;
     max-width: 100%;
   }
-}
-
-#qr-code {
-  text-align: center; /* Centra el QR en el footer */
-  margin-top: 1rem; /* Espacio encima del QR */
 }
