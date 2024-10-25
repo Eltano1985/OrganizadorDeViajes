@@ -13,10 +13,27 @@ header {
   background-color: #4CAF50;
   color: white;
   padding: 1rem;
-  text-align: center;
+  text-align: left; /* Alinear el texto a la izquierda */
   width: 100%;
 }
 
+.header-container {
+  display: flex;
+  justify-content: space-between; /* Espacio entre el título y el QR */
+  align-items: center; /* Centrar verticalmente */
+  padding: 0 20px; /* Margen a los costados */
+}
+
+.header-container h1 {
+  margin: 0; /* Eliminar margen por defecto */
+}
+
+#qr-code {
+  text-align: center;
+  margin-top: 0; /* Eliminar margen superior */
+}
+
+/* Estilos para el contenido principal */
 main {
   flex: 1; /* Para que el main ocupe todo el espacio restante */
   padding: 2rem;
@@ -150,107 +167,30 @@ footer {
 /* Estilos del QR Code */
 #qr-code {
   text-align: center;
-  margin-top: 1rem;
-}
-
-/* Estilos para el Carrusel de Actividades */
-#activities-carousel {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem 0;
-  border-radius: 8px;
-}
-
-.carousel-track {
-  display: flex;
-  transition: transform 0.3s ease-in-out;
-}
-
-.carousel-item {
-  min-width: 100%;
-  height: 300px;
-  border-radius: 8px;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.carousel-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.carousel-item .select-checkbox {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background-color: white;
-  padding: 0.3rem;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.carousel-item.selected {
-  border: 2px solid #4CAF50;
-}
-
-/* Botones de navegación del carrusel */
-.carousel-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.carousel-button.prev {
-  left: 0.5rem;
-}
-
-.carousel-button.next {
-  right: 0.5rem;
-}
-
-.carousel-button:hover {
-  background-color: rgba(0, 0, 0, 0.8);
+  margin-top: 0; /* Eliminar margen superior */
 }
 
 /* Media Queries para adaptabilidad en móviles */
 @media (max-width: 768px) {
   #trip-planner {
-    flex-direction: column; /* Cambiar a columna en pantallas pequeñas */
+      flex-direction: column; /* Cambiar a columna en pantallas pequeñas */
   }
 
   #map-section {
-    margin-top: 2rem;
+      margin-top: 2rem;
   }
 
   header, footer {
-    padding: 0.5rem;
+      padding: 0.5rem;
   }
 
   #itinerary-list {
-    flex-direction: column;
+      flex-direction: column;
   }
 
   .itinerary-item {
-    flex: 1 1 100%;
-    max-width: 100%;
+      flex: 1 1 100%;
+      max-width: 100%;
   }
 }
+  
