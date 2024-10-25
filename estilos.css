@@ -73,6 +73,13 @@ h1, h2 {
   margin-bottom: 1rem;
 }
 
+/* Carrusel de actividades */
+#activities-carousel img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
 /* Formulario de planificación */
 #trip-form form div {
   margin-bottom: 1rem;
@@ -109,88 +116,4 @@ h1, h2 {
   background-color: white;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-#itinerary-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 1rem;
-  justify-content: flex-start;
-}
-
-/* Footer */
-footer {
-  text-align: center;
-  padding: 1rem;
-  background-color: #4CAF50;
-  color: white;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
-
-/* Estilos para cada itinerario */
-.itinerary-item {
-  background-color: #fff;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  flex: 1 1 300px;
-  max-width: 300px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.itinerary-item h3 {
-  margin-top: 0;
-}
-
-.delete-btn {
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 1rem;
-}
-
-.delete-btn:hover {
-  background-color: #ff1a1a;
-}
-
-/* Estilos del QR Code */
-#qr-code {
-  text-align: center;
-  margin-top: 0; /* Eliminar margen superior */
-}
-
-/* Media Queries para adaptabilidad en móviles */
-@media (max-width: 768px) {
-  #trip-planner {
-      flex-direction: column; /* Cambiar a columna en pantallas pequeñas */
-  }
-
-  #map-section {
-      margin-top: 2rem;
-  }
-
-  header, footer {
-      padding: 0.5rem;
-  }
-
-  #itinerary-list {
-      flex-direction: column;
-  }
-
-  .itinerary-item {
-      flex: 1 1 100%;
-      max-width: 100%;
-  }
-}
-  

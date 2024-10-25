@@ -6,7 +6,7 @@ class TripPlanner {
         this.mapHandler = new MapHandler(mapId);
         this.form = document.getElementById('itinerary-form');
         this.itineraryList = document.getElementById('itinerary-list');
-        this.activitiesList = document.getElementById('activities-list'); // Contenedor del carrusel
+        this.activitiesList = document.getElementById('activities-carousel'); // Contenedor del carrusel
         this.planTripBtn = document.getElementById('plan-trip-btn');
         this.selectionError = document.getElementById('selection-error');
   
@@ -76,29 +76,29 @@ class TripPlanner {
                 alert('Ocurrió un error al intentar encontrar la ubicación.');
             });
     }
-    
-  
+
     fetchActivitiesImages(destination) {
         const pexelsApiUrl = `https://api.pexels.com/v1/search?query=${encodeURIComponent(destination)}&per_page=10`;
     
         this.activitiesList.innerHTML = '<p>Cargando imágenes...</p>'; // Mensaje de carga
         fetch(pexelsApiUrl, {
             headers: {
-                Authorization: 'JYsFV9lbfdIrA9TYZ0QfFc6d61DFbbQub8lLLrplXYuIADPBYDp6XnC1' // Asegúrate de que esta clave sea válida
+                Authorization: 'JYsFV9lbfdIrA9TYZ0QfFc6d61DFbbQub8lLLrplXYuIADPBYDp6XnC1' // Reemplaza con tu clave API de Pexels
             }
         })
         .then(response => {
-            console.log('Pexels API Response:', response); // Ver respuesta de la API
+            console.log('Pexels API Response:', response);
             if (!response.ok) {
                 throw new Error('Error en la respuesta de la API: ' + response.statusText);
             }
             return response.json();
         })
         .then(data => {
-            console.log('Datos de Pexels:', data); // Ver los datos devueltos
+            console.log('Datos de Pexels:', data);
             this.activitiesList.innerHTML = ''; // Limpiar mensaje de carga
             if (data.photos && data.photos.length > 0) {
                 this.displayActivityImages(data.photos);
+                this.initializeCarousel(); // Inicializar el carrusel después de mostrar imágenes
             } else {
                 this.activitiesList.innerHTML = 'No se encontraron imágenes para este destino.';
             }
@@ -108,9 +108,7 @@ class TripPlanner {
             this.activitiesList.innerHTML = 'Ocurrió un error al obtener las imágenes: ' + error.message;
         });
     }
-    
-    
-  
+
     displayActivityImages(images) {
         this.activitiesCoordinates = []; // Limpiar coordenadas antes de mostrar nuevas
     
@@ -139,7 +137,18 @@ class TripPlanner {
             this.activitiesList.appendChild(div);
         });
     }
-    
+
+    initializeCarousel() {
+        // Inicializa el carrusel de Slick después de agregar las imágenes
+        $(this.activitiesList).slick({
+            dots: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            adaptiveHeight: true, // Ajusta la altura del carrusel
+        });
+    }
   
     handleCheckboxChange(checkbox, photographer) {
         if (checkbox.checked) {
