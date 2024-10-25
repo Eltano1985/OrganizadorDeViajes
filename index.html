@@ -68,45 +68,7 @@
                 width: 128, // Ancho del código QR
                 height: 128 // Alto del código QR
             });
-
-            // Configuración del carrusel
-            $('#activities-carousel').slick({
-                dots: true,
-                infinite: true,
-                speed: 500,
-                slidesToShow: 3,
-                slidesToScroll: 1,
-            });
-        });
-
-        // Función para cargar imágenes de Pexels
-        function loadImages(destination) {
-            const apiKey = 'JYsFV9lbfdIrA9TYZ0QfFc6d61DFbbQub8lLLrplXYuIADPBYDp6XnC1'; // Reemplaza con tu clave API de Pexels
-            const url = `https://api.pexels.com/v1/search?query=${destination}&per_page=10`;
-
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    Authorization: apiKey,
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                $('#activities-carousel').slick('slickRemove', null, null, true); // Limpiar el carrusel
-                data.photos.forEach(photo => {
-                    $('#activities-carousel').slick('slickAdd', `<div><img src="${photo.src.medium}" alt="${photo.alt}" /></div>`);
-                });
-            })
-            .catch(error => console.error('Error:', error));
-        }
-
-        // Event listener para el formulario
-        $('#itinerary-form').on('submit', function(event) {
-            event.preventDefault();
-            const destination = $('#destination').val();
-            loadImages(destination); // Cargar imágenes al enviar el formulario
-            // Aquí puedes agregar la lógica para planificar el viaje
-        });
+        })
     </script>
 </body>
 </html>
