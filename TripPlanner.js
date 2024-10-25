@@ -6,7 +6,7 @@ class TripPlanner {
         this.mapHandler = new MapHandler(mapId);
         this.form = document.getElementById('itinerary-form');
         this.itineraryList = document.getElementById('itinerary-list');
-        this.activitiesList = document.getElementById('activities-list');
+        this.activitiesList = document.getElementById('activities-list'); // Contenedor del carrusel
         this.planTripBtn = document.getElementById('plan-trip-btn');
         this.selectionError = document.getElementById('selection-error');
   
@@ -26,7 +26,7 @@ class TripPlanner {
         const startDate = document.getElementById('start-date').value;
         const endDate = document.getElementById('end-date').value;
         const selectedActivities = this.selectedPlaces.join(', ');
-  
+
         this.createItineraryItem(destination, startDate, endDate, selectedActivities);
         
         // Limpiar el formulario y reiniciar la lista de selección
@@ -55,18 +55,18 @@ class TripPlanner {
   
     geocodeDestination(destination) {
         const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destination)}`;
-  
-        // Llamada a la API para obtener coordenadas
+      
         fetch(geocodeUrl)
             .then(response => response.json())
             .then(data => {
+                console.log('Geocoding response:', data);
                 if (data.length > 0) {
                     const lat = data[0].lat;
                     const lon = data[0].lon;
                     this.mapHandler.setView(lat, lon);
                     this.mapHandler.addMarker(lat, lon, destination);
                     this.activitiesList.innerHTML = ''; // Limpiar actividades anteriores
-                    this.fetchActivities(lat, lon);
+                    this.fetchActivitiesImages(destination);
                 } else {
                     alert('No se encontró el destino.');
                 }
@@ -76,64 +76,82 @@ class TripPlanner {
                 alert('Ocurrió un error al intentar encontrar la ubicación.');
             });
     }
+    
   
-    fetchActivities(lat, lon) {
-        this.activitiesList.innerHTML = '<p>Cargando actividades...</p>'; // Mostrar mensaje de carga
-        ActivityFetcher.fetchActivities(lat, lon)
-            .then(data => {
-                this.activitiesList.innerHTML = ''; // Limpiar el mensaje de carga
-                if (data.elements.length > 0) {
-                    this.displayActivities(data.elements);
-                } else {
-                    this.activitiesList.innerHTML = 'No se encontraron actividades.';
-                }
-            })
-            .catch(error => {
-                this.activitiesList.innerHTML = 'Ocurrió un error al obtener las actividades.';
-            });
+    fetchActivitiesImages(destination) {
+        const pexelsApiUrl = `https://api.pexels.com/v1/search?query=${encodeURIComponent(destination)}&per_page=10`;
+    
+        this.activitiesList.innerHTML = '<p>Cargando imágenes...</p>'; // Mensaje de carga
+        fetch(pexelsApiUrl, {
+            headers: {
+                Authorization: 'JYsFV9lbfdIrA9TYZ0QfFc6d61DFbbQub8lLLrplXYuIADPBYDp6XnC1' // Asegúrate de que esta clave sea válida
+            }
+        })
+        .then(response => {
+            console.log('Pexels API Response:', response); // Ver respuesta de la API
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de la API: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Datos de Pexels:', data); // Ver los datos devueltos
+            this.activitiesList.innerHTML = ''; // Limpiar mensaje de carga
+            if (data.photos && data.photos.length > 0) {
+                this.displayActivityImages(data.photos);
+            } else {
+                this.activitiesList.innerHTML = 'No se encontraron imágenes para este destino.';
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener las imágenes:', error);
+            this.activitiesList.innerHTML = 'Ocurrió un error al obtener las imágenes: ' + error.message;
+        });
     }
+    
+    
   
-    displayActivities(places) {
+    displayActivityImages(images) {
         this.activitiesCoordinates = []; // Limpiar coordenadas antes de mostrar nuevas
-  
-        places.slice(0, 10).forEach((place, index) => {
-            const placeName = place.tags.name || `Lugar sin nombre ${index + 1}`;
-            const lat = place.lat || 0; // Extraer latitud
-            const lon = place.lon || 0; // Extraer longitud
-            
-            // Guardar coordenadas del lugar
-            this.activitiesCoordinates.push({ name: placeName, lat: lat, lon: lon });
-  
+    
+        images.forEach((image, index) => {
+            const imgElement = document.createElement('img');
+            imgElement.src = image.src.medium; // Cambia esto a image.src.large si quieres una mejor calidad
+            imgElement.alt = `Actividad ${index + 1}`;
+            imgElement.classList.add('activity-image');
+    
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.value = placeName;
-            checkbox.id = `place-${index}`;
-            checkbox.addEventListener('change', () => this.handleCheckboxChange(checkbox, lat, lon));
-  
+            checkbox.value = image.src.medium; // Cambia esto si quieres guardar otro valor
+            checkbox.id = `image-${index}`;
+            checkbox.addEventListener('change', () => this.handleCheckboxChange(checkbox, image.photographer));
+    
             const label = document.createElement('label');
-            label.htmlFor = `place-${index}`;
-            label.textContent = `${index + 1}. ${placeName}`;
-  
+            label.htmlFor = `image-${index}`;
+            label.textContent = `Imagen ${index + 1} - Fotógrafo: ${image.photographer}`;
+    
             const div = document.createElement('div');
+            div.classList.add('activity-item');
+            div.appendChild(imgElement);
             div.appendChild(checkbox);
             div.appendChild(label);
-  
+    
             this.activitiesList.appendChild(div);
         });
     }
+    
   
-    handleCheckboxChange(checkbox, lat, lon) {
+    handleCheckboxChange(checkbox, photographer) {
         if (checkbox.checked) {
             if (this.selectedPlaces.length < 10) {
-                this.selectedPlaces.push(checkbox.value);
+                this.selectedPlaces.push(photographer);
                 this.selectionError.style.display = 'none';
-                this.mapHandler.addActivityMarker(lat, lon, checkbox.value); // Añadir marcador en el mapa
             } else {
                 checkbox.checked = false;
                 this.selectionError.style.display = 'block';
             }
         } else {
-            const index = this.selectedPlaces.indexOf(checkbox.value);
+            const index = this.selectedPlaces.indexOf(photographer);
             if (index > -1) {
                 this.selectedPlaces.splice(index, 1);
             }
