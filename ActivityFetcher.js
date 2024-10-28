@@ -1,11 +1,12 @@
 class ActivityFetcher {
     static fetchActivities(destination) {
-        const apiKey = 'JYsFV9lbfdIrA9TYZ0QfFc6d61DFbbQub8lLLrplXYuIADPBYDp6XnC1'; // Tu clave de API de Pexels
-        const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(destination)}&per_page=10`;
+        const foursquareApiKey = 'fsq3LTq26zit3XsJ0g36ORlV5EShWfAlN0zh0YUPPAjE+RE='; // Reemplaza con tu clave de Foursquare
+        const url = `https://api.foursquare.com/v3/places/search?near=${encodeURIComponent(destination)}&limit=15`;
 
         return fetch(url, {
             headers: {
-                Authorization: apiKey
+                Authorization: foursquareApiKey,
+                'Accept': 'application/json'
             }
         })
         .then(response => {
@@ -14,10 +15,10 @@ class ActivityFetcher {
             }
             return response.json();
         })
-        .then(data => data.photos) // Asegúrate de que el resultado sea un array de fotos
+        .then(data => data.results) // Asegúrate de que el resultado sea un array de lugares
         .catch(error => {
             console.error('Error al obtener las actividades:', error);
-            throw new Error('Ocurrió un error al obtener las imágenes del destino.');
+            throw new Error('Ocurrió un error al obtener los sitios de interés.');
         });
     }
 }
