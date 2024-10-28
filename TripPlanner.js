@@ -79,11 +79,12 @@ class TripPlanner {
   
     fetchActivities(lat, lon) {
         this.activitiesList.innerHTML = '<p>Cargando actividades...</p>'; // Mostrar mensaje de carga
-        ActivityFetcher.fetchActivities(lat, lon)
+        const destination = document.getElementById('destination').value; // Obtener el destino
+        ActivityFetcher.fetchActivities(lat, lon, destination)
             .then(data => {
                 this.activitiesList.innerHTML = ''; // Limpiar el mensaje de carga
-                if (data.elements.length > 0) {
-                    this.displayActivities(data.elements);
+                if (data.activitiesData.elements.length > 0) {
+                    this.displayActivities(data.activitiesData.elements, data.imagesData.photos);
                 } else {
                     this.activitiesList.innerHTML = 'No se encontraron actividades.';
                 }
@@ -92,35 +93,64 @@ class TripPlanner {
                 this.activitiesList.innerHTML = 'Ocurrió un error al obtener las actividades.';
             });
     }
+    
+    
+    
   
-    displayActivities(places) {
+    displayActivities(places, images) {
         this.activitiesCoordinates = []; // Limpiar coordenadas antes de mostrar nuevas
-  
-        places.slice(0, 10).forEach((place, index) => {
-            const placeName = place.tags.name || `Lugar sin nombre ${index + 1}`;
-            const lat = place.lat || 0; // Extraer latitud
-            const lon = place.lon || 0; // Extraer longitud
-            
+    
+        // Crear contenedor para el carrusel
+        const carouselContainer = document.createElement('div');
+        carouselContainer.classList.add('carousel');
+    
+        // Mostrar hasta 10 imágenes en el carrusel
+        images.slice(0, 10).forEach((image, index) => {
+            const placeName = places[index]?.tags.name || `Lugar sin nombre ${index + 1}`;
+            const lat = places[index]?.lat || 0; // Extraer latitud
+            const lon = places[index]?.lon || 0; // Extraer longitud
+    
             // Guardar coordenadas del lugar
             this.activitiesCoordinates.push({ name: placeName, lat: lat, lon: lon });
-  
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.value = placeName;
-            checkbox.id = `place-${index}`;
-            checkbox.addEventListener('change', () => this.handleCheckboxChange(checkbox, lat, lon));
-  
-            const label = document.createElement('label');
-            label.htmlFor = `place-${index}`;
-            label.textContent = `${index + 1}. ${placeName}`;
-  
-            const div = document.createElement('div');
-            div.appendChild(checkbox);
-            div.appendChild(label);
-  
-            this.activitiesList.appendChild(div);
+    
+            const img = document.createElement('img');
+            img.src = image.src.small; // Tamaño pequeño de la imagen
+            img.alt = placeName;
+            img.classList.add('carousel-image');
+            img.addEventListener('click', () => this.handleImageSelect(placeName, lat, lon));
+    
+            const item = document.createElement('div');
+            item.classList.add('carousel-item');
+            item.appendChild(img);
+            carouselContainer.appendChild(item);
         });
+    
+        this.activitiesList.innerHTML = ''; // Limpiar actividades anteriores
+        this.activitiesList.appendChild(carouselContainer);
     }
+        
+    
+    handleImageSelect(placeName, lat, lon) {
+        // Lógica para seleccionar o deseleccionar imágenes
+        const index = this.selectedPlaces.indexOf(placeName);
+        if (index > -1) {
+            // Ya está seleccionado, eliminarlo
+            this.selectedPlaces.splice(index, 1);
+            this.mapHandler.removeActivityMarker(lat, lon); // Elimina el marcador del mapa
+        } else {
+            // Agregar a los seleccionados
+            if (this.selectedPlaces.length < 10) {
+                this.selectedPlaces.push(placeName);
+                this.mapHandler.addActivityMarker(lat, lon, placeName); // Añadir marcador en el mapa
+            } else {
+                alert('Has alcanzado el límite de 10 actividades.');
+            }
+        }
+        // Actualizar el estado del botón
+        this.planTripBtn.disabled = this.selectedPlaces.length === 0;
+    }
+    
+    
   
     handleCheckboxChange(checkbox, lat, lon) {
         if (checkbox.checked) {

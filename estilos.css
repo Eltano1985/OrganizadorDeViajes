@@ -51,6 +51,28 @@ main {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+/* Estilos para el carrusel */
+.carousel {
+  display: flex;
+  overflow-x: auto; /* Permitir desplazamiento horizontal */
+  scrollbar-width: thin; /* Estilo del scrollbar en Firefox */
+  -ms-overflow-style: none;  /* Ocultar scrollbar en IE y Edge */
+}
+
+.carousel::-webkit-scrollbar {
+  display: none; /* Ocultar scrollbar en Chrome, Safari y Opera */
+}
+
+.carousel-item {
+  margin: 5px; /* Espaciado entre imágenes */
+}
+
+.carousel-image {
+  max-width: 150px; /* Ajusta el tamaño máximo de la imagen */
+  cursor: pointer; /* Indica que la imagen es clickeable */
+  border-radius: 8px; /* Bordes redondeados */
+}
+
 /* Estilos para encabezados */
 h1, h2 {
   margin-bottom: 1rem;
@@ -114,65 +136,8 @@ footer {
   width: 100%;
 }
 
-/* Estilos para cada itinerario */
-.itinerary-item {
-  background-color: #fff;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  flex: 1 1 300px;
-  max-width: 300px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.itinerary-item h3 {
-  margin-top: 0;
-}
-
-.delete-btn {
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 1rem;
-}
-
-.delete-btn:hover {
-  background-color: #ff1a1a;
-}
-
-/* Estilos del QR Code */
-#qr-code {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-/* Media Queries para adaptabilidad en móviles */
-@media (max-width: 768px) {
-  #trip-planner {
-    flex-direction: column; /* Cambiar a columna en pantallas pequeñas */
-  }
-
-  #map-section {
-    margin-top: 2rem;
-  }
-
-  header, footer {
-    padding: 0.5rem;
-  }
-
-  #itinerary-list {
-    flex-direction: column;
-  }
-
-  .itinerary-item {
-    flex: 1 1 100%;
-    max-width: 100%;
-  }
+/* Estilos para las casillas de verificación */
+.item label {
+  margin-top: 5px;
+  font-size: 14px;
 }
