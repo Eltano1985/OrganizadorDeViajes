@@ -28,7 +28,10 @@ class TripPlanner {
         const startDate = document.getElementById('start-date').value;
         const endDate = document.getElementById('end-date').value;
         const selectedActivities = this.selectedPlaces.join(', ');
-
+    
+        // Guardar el destino en localStorage
+        localStorage.setItem('destination', destination);
+    
         this.createItineraryItem(destination, startDate, endDate, selectedActivities);
         
         // Limpiar el formulario y reiniciar la lista de selección
@@ -38,6 +41,7 @@ class TripPlanner {
         this.selectedPlaces = [];
         this.activitiesCoordinates = []; // Resetear las coordenadas al finalizar el viaje
     }
+    
 
     createItineraryItem(destination, startDate, endDate, activities) {
         const itineraryItem = document.createElement('div');

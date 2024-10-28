@@ -5,22 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Información del Destino</title>
     <link rel="stylesheet" href="estilos2.css"> <!-- Enlace a tu archivo CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" /> <!-- CSS de Slick Carousel -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" /> <!-- CSS de Slick Carousel Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/> <!-- CSS de Slick Carousel -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/> <!-- CSS del tema de Slick Carousel -->
 </head>
 <body>
     <header>
-        <h1>Información del Destino</h1>
+        <div class="header-container">
+            <h1>Información del Destino</h1>
+        </div>
     </header>
     <main>
         <div id="info-container">
             <div id="summary-column">
                 <h2>Resumen del Destino</h2>
-                <p id="destination-summary">Aquí se mostrará un resumen del destino.</p>
+                <p id="destination-summary">Aquí aparecerá un resumen del destino seleccionado.</p>
             </div>
-            <div id="carousel-column">
+            <div id="images-column">
                 <h2>Imágenes del Destino</h2>
-                <div id="image-carousel" class="slick-carousel"></div> <!-- Contenedor para el carrusel -->
+                <div id="images-carousel" class="slick-carousel">
+                    <!-- Las imágenes del carrusel se agregarán aquí dinámicamente -->
+                </div>
             </div>
         </div>
     </main>
@@ -29,7 +33,7 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script> <!-- Slick Carousel JS -->
-    <script type="module" src="paginaInformacion.js"></script> <!-- Enlace a tu archivo JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script> <!-- JS de Slick Carousel -->
+    <script src="informacion.js"></script> <!-- Enlace a tu archivo JavaScript -->
 </body>
 </html>
