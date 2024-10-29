@@ -42,7 +42,8 @@ header {
   display: flex;
   align-items: center;
   overflow: hidden;
-  height: 100%; /* Ajustar al tamaño de la columna */
+  height: 100%;
+  margin-bottom: 2.5rem; /* Agregar margen inferior */
 }
 
 #images-carousel img {
