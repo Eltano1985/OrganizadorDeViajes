@@ -5,25 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Información del Destino</title>
     <link rel="stylesheet" href="estilos2.css"> <!-- Enlace a tu archivo CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/> <!-- CSS de Slick Carousel -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/> <!-- CSS del tema de Slick Carousel -->
 </head>
 <body>
     <header>
-        <div class="header-container">
-            <h1>Información del Destino</h1>
-        </div>
+        <h1>Información de <span id="destino-titulo"></span></h1> <!-- Título dinámico con el destino -->
     </header>
     <main>
-        <div id="info-container">
+        <div id="info-container"> <!-- Contenedor principal en dos columnas -->
+            <!-- Columna de Resumen del Destino -->
             <div id="summary-column">
                 <h2>Resumen del Destino</h2>
-                <p id="destination-summary">Aquí aparecerá un resumen del destino seleccionado.</p>
+                <p id="descripcion-destino"></p> <!-- Texto dinámico del destino -->
             </div>
+
+            <!-- Columna del Carrusel de imágenes -->
             <div id="images-column">
-                <h2>Imágenes del Destino</h2>
-                <div id="images-carousel" class="slick-carousel">
-                    <!-- Las imágenes del carrusel se agregarán aquí dinámicamente -->
+                <h2>Imágenes de <span id="destino-titulo2"></span></h2>
+                <div id="images-carousel">
+                    <button id="prev-btn" class="carousel-btn">&#10094;</button> <!-- Botón para imagen anterior -->
+                    <img id="carousel-image" src="" alt="Imagen del destino"> <!-- Imagen actual del carrusel -->
+                    <button id="next-btn" class="carousel-btn">&#10095;</button> <!-- Botón para siguiente imagen -->
                 </div>
             </div>
         </div>
@@ -32,8 +33,6 @@
         <p>© 2024 Planificador de Viajes</p>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script> <!-- JS de Slick Carousel -->
-    <script src="informacion.js"></script> <!-- Enlace a tu archivo JavaScript -->
+    <script src="informacion.js"></script> <!-- Archivo JavaScript para cargar información -->
 </body>
 </html>

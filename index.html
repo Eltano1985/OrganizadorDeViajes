@@ -67,9 +67,15 @@
                 height: 128 // Alto del código QR
             });
             
-            // Redirigir a la nueva página de información
+            // Redirigir a la nueva página de información con el destino seleccionado
             $('#more-info-btn').on('click', function() {
-                window.location.href = 'masinformacion.html';
+                const destino = $('#destination').val(); // Obtiene el destino ingresado
+                if (destino) {
+                    localStorage.setItem('destinoSeleccionado', destino); // Guarda el destino en localStorage
+                    window.location.href = 'masinformacion.html'; // Redirige a la página secundaria
+                } else {
+                    alert("Por favor, ingresa un destino antes de continuar."); // Alerta si no hay destino
+                }
             });
         });
     </script>
