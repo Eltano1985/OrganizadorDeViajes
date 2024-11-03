@@ -13,18 +13,23 @@ document.addEventListener("DOMContentLoaded", () => {
 async function obtenerDatosCiudad(ciudad) {
     const username = 'eamoresano85'; // Reemplaza con tu nombre de usuario de GeoNames
     const url = `http://api.geonames.org/searchJSON?q=${encodeURIComponent(ciudad)}&maxRows=1&username=${username}`;
-    
+    console.log(`Buscando datos de ciudad para: ${ciudad} en la URL: ${url}`);
+
     try {
         const response = await fetch(url);
         if (!response.ok) throw new Error("Error al obtener datos de la ciudad");
-        
+
         const data = await response.json();
-        if (data.geonames.length === 0) throw new Error("Ciudad no encontrada");
+        console.log("Datos recibidos de GeoNames:", data);
 
-        // Extraer país de los datos de la ciudad
+        if (data.geonames.length === 0) {
+            console.warn("No se encontró la ciudad en los resultados de GeoNames");
+            throw new Error("Ciudad no encontrada");
+        }
+
         const pais = data.geonames[0].countryName;
+        console.log(`País encontrado: ${pais}`);
         return pais;
-
     } catch (error) {
         console.error("Error al obtener datos de la ciudad:", error);
         return null;
@@ -32,11 +37,14 @@ async function obtenerDatosCiudad(ciudad) {
 }
 
 async function obtenerDatosPais(pais) {
+    console.log(`Buscando datos del país: ${pais}`);
     try {
         const response = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(pais)}`);
         if (!response.ok) throw new Error("Error al obtener datos del país");
 
         const data = await response.json();
+        console.log("Datos recibidos de RestCountries:", data);
+
         const idioma = data[0].languages[Object.keys(data[0].languages)[0]]; // Idioma principal
         const moneda = data[0].currencies[Object.keys(data[0].currencies)[0]].name; // Moneda
 
@@ -47,22 +55,16 @@ async function obtenerDatosPais(pais) {
     }
 }
 
-
-
-
 async function cargarResumenDestino(destino) {
     try {
-        // Obtener el país de la ciudad
         const pais = await obtenerDatosCiudad(destino);
         if (!pais) {
             document.getElementById('descripcion-destino').innerText = "No se pudo encontrar el país para la ciudad.";
             return;
         }
 
-        // Obtener el idioma y moneda del país
         const datosPais = await obtenerDatosPais(pais);
-        
-        // Obtener el resumen de Wikipedia
+
         const response = await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(destino)}`);
         if (!response.ok) throw new Error("Error al obtener datos de Wikipedia");
 
@@ -76,15 +78,11 @@ async function cargarResumenDestino(destino) {
             <p>Para más información, visita la página completa en <a href="https://es.wikipedia.org/wiki/${encodeURIComponent(destino)}" target="_blank">${destino}</a>.</p>
         `;
         document.getElementById('descripcion-destino').innerHTML = detalles;
-
     } catch (error) {
         console.error("Error al cargar el resumen del destino:", error);
         document.getElementById('descripcion-destino').innerText = "No se pudo cargar la información del destino.";
     }
 }
-
-
-
 
 async function cargarImagenesDestino(destino) {
     const apiKey = 'JYsFV9lbfdIrA9TYZ0QfFc6d61DFbbQub8lLLrplXYuIADPBYDp6XnC1';
@@ -105,10 +103,8 @@ async function cargarImagenesDestino(destino) {
         let currentIndex = 0;
         const carouselImage = document.getElementById('carousel-image');
 
-        // Mostrar la primera imagen
         carouselImage.src = images[currentIndex];
 
-        // Configurar botones de navegación
         document.getElementById('next-btn').addEventListener('click', () => {
             currentIndex = (currentIndex + 1) % images.length;
             carouselImage.src = images[currentIndex];
