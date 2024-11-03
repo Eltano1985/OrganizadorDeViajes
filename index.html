@@ -23,19 +23,19 @@
                 <form id="itinerary-form">
                     <div>
                         <label for="destination">Destino</label>
-                        <input type="text" id="destination" name="destination" required>
+                        <input type="text" id="destination" name="destination" required aria-label="Destino">
                     </div>
                     <div>
                         <label for="start-date">Fecha de Salida</label>
-                        <input type="date" id="start-date" name="start-date" required>
+                        <input type="date" id="start-date" name="start-date" required aria-label="Fecha de Salida">
                     </div>
                     <div>
                         <label for="end-date">Fecha de Llegada</label>
-                        <input type="date" id="end-date" name="end-date" required>
+                        <input type="date" id="end-date" name="end-date" required aria-label="Fecha de Llegada" onfocus="this.setAttribute('min', document.getElementById('start-date').value);">
                     </div>
                     <div style="display: flex; gap: 10px;"> <!-- Contenedor flex para los botones -->
                         <button id="plan-trip-btn" type="submit" disabled>Planificar Viaje</button>
-                        <button id="more-info-btn" type="button">Más información</button> <!-- Botón Más información -->
+                        <button id="more-info-btn" type="button" aria-label="Más información">Más información</button> <!-- Botón Más información -->
                     </div>
                 </form>
                 <div id="itinerary-list"></div> <!-- Lista de itinerarios -->

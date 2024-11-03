@@ -20,9 +20,9 @@ class MapHandler {
         this.marker = L.marker([lat, lon]).addTo(this.map).bindPopup(`Destino: ${destination}`).openPopup();
     }
   
-    addActivityMarker(lat, lon, placeName) {
+    addActivityMarker(lat, lon, placeName, index) {
         // Añadir un marcador para actividades seleccionadas
-        const activityMarker = L.marker([lat, lon]).addTo(this.map).bindPopup(placeName);
+        const activityMarker = L.marker([lat, lon]).addTo(this.map).bindPopup(`Actividad ${index}: ${placeName}`);
         this.activityMarkers.push(activityMarker); // Almacenar el marcador en el array
     }
 
