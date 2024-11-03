@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function obtenerDatosCiudad(ciudad) {
-    const username = 'eamoresano85'; // Reemplaza con tu nombre de usuario de GeoNames
+    const username = 'eamoresano85';
     const url = `http://api.geonames.org/searchJSON?q=${encodeURIComponent(ciudad)}&maxRows=1&username=${username}`;
     console.log(`Buscando datos de ciudad para: ${ciudad} en la URL: ${url}`);
 
@@ -37,16 +37,55 @@ async function obtenerDatosCiudad(ciudad) {
 }
 
 async function obtenerDatosPais(pais) {
-    console.log(`Buscando datos del país: ${pais}`);
+    const traduccionesIdiomas = {
+        "English": "Inglés",
+        "French": "Francés",
+        "Spanish": "Español",
+        "German": "Alemán",
+        "Portuguese": "Portugués",
+        "Italian": "Italiano",
+        "Dutch": "Neerlandés",
+        "Russian": "Ruso",
+        "Chinese": "Chino",
+        "Japanese": "Japonés",
+        "Arabic": "Árabe",
+        "Hindi": "Hindi",
+        "Bengali": "Bengalí",
+        "Korean": "Coreano",
+        "Turkish": "Turco",
+        "Swedish": "Sueco",
+        "Polish": "Polaco"
+        // Agrega más traducciones según sea necesario
+    };
+
+    const traduccionesMonedas = {
+        "Euro": "Euro",
+        "United States dollar": "Dólar estadounidense",
+        "Pound sterling": "Libra esterlina",
+        "Yen": "Yen",
+        "Swiss franc": "Franco suizo",
+        "Canadian dollar": "Dólar canadiense",
+        "Australian dollar": "Dólar australiano",
+        "Brazilian real": "Real brasileño",
+        "Mexican peso": "Peso mexicano",
+        "Russian ruble": "Rublo ruso",
+        "Indian rupee": "Rupia india",
+        "Chinese yuan": "Yuan chino",
+        "Turkish lira": "Lira turca",
+        "South African rand": "Rand sudafricano"
+        // Agrega más traducciones según sea necesario
+    };
+
     try {
         const response = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(pais)}`);
         if (!response.ok) throw new Error("Error al obtener datos del país");
 
         const data = await response.json();
-        console.log("Datos recibidos de RestCountries:", data);
+        const idiomaOriginal = data[0].languages[Object.keys(data[0].languages)[0]];
+        const monedaOriginal = data[0].currencies[Object.keys(data[0].currencies)[0]].name;
 
-        const idioma = data[0].languages[Object.keys(data[0].languages)[0]]; // Idioma principal
-        const moneda = data[0].currencies[Object.keys(data[0].currencies)[0]].name; // Moneda
+        const idioma = traduccionesIdiomas[idiomaOriginal] || idiomaOriginal;
+        const moneda = traduccionesMonedas[monedaOriginal] || monedaOriginal;
 
         return { idioma, moneda };
     } catch (error) {
@@ -78,6 +117,7 @@ async function cargarResumenDestino(destino) {
             <p>Para más información, visita la página completa en <a href="https://es.wikipedia.org/wiki/${encodeURIComponent(destino)}" target="_blank">${destino}</a>.</p>
         `;
         document.getElementById('descripcion-destino').innerHTML = detalles;
+
     } catch (error) {
         console.error("Error al cargar el resumen del destino:", error);
         document.getElementById('descripcion-destino').innerText = "No se pudo cargar la información del destino.";
