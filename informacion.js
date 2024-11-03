@@ -11,30 +11,26 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function obtenerDatosCiudad(ciudad) {
-    const username = 'eamoresano85';
+    const username = 'eamoresano85'; // Reemplaza con tu nombre de usuario de GeoNames
     const url = `http://api.geonames.org/searchJSON?q=${encodeURIComponent(ciudad)}&maxRows=1&username=${username}`;
-    console.log(`Buscando datos de ciudad para: ${ciudad} en la URL: ${url}`);
 
     try {
         const response = await fetch(url);
         if (!response.ok) throw new Error("Error al obtener datos de la ciudad");
-
+        
         const data = await response.json();
-        console.log("Datos recibidos de GeoNames:", data);
+        if (data.geonames.length === 0) throw new Error("Ciudad no encontrada");
 
-        if (data.geonames.length === 0) {
-            console.warn("No se encontró la ciudad en los resultados de GeoNames");
-            throw new Error("Ciudad no encontrada");
-        }
-
-        const pais = data.geonames[0].countryName;
-        console.log(`País encontrado: ${pais}`);
+        // Extraer país de los datos de la ciudad
+        const pais = data.geonames[0].countryName; // Obtén el nombre del país desde la respuesta
         return pais;
+
     } catch (error) {
         console.error("Error al obtener datos de la ciudad:", error);
         return null;
     }
 }
+
 
 async function obtenerDatosPais(pais) {
     const traduccionesIdiomas = {
@@ -81,10 +77,13 @@ async function obtenerDatosPais(pais) {
         if (!response.ok) throw new Error("Error al obtener datos del país");
 
         const data = await response.json();
-        const idiomaOriginal = data[0].languages[Object.keys(data[0].languages)[0]];
-        const monedaOriginal = data[0].currencies[Object.keys(data[0].currencies)[0]].name;
+        const idiomasDisponibles = data[0].languages;
+        
+        // Priorizar el español si está disponible
+        const idioma = idiomasDisponibles['spa'] ? traduccionesIdiomas['Spanish'] : 
+                        traduccionesIdiomas[Object.keys(idiomasDisponibles)[0]] || 'No disponible';
 
-        const idioma = traduccionesIdiomas[idiomaOriginal] || idiomaOriginal;
+        const monedaOriginal = data[0].currencies[Object.keys(data[0].currencies)[0]].name;
         const moneda = traduccionesMonedas[monedaOriginal] || monedaOriginal;
 
         return { idioma, moneda };
@@ -94,16 +93,24 @@ async function obtenerDatosPais(pais) {
     }
 }
 
+
 async function cargarResumenDestino(destino) {
+    let pais = "No se encontró el país"; // Valor predeterminado
+    let datosPais = { idioma: "No disponible", moneda: "No disponible" }; // Valores predeterminados
+
     try {
-        const pais = await obtenerDatosCiudad(destino);
-        if (!pais) {
-            document.getElementById('descripcion-destino').innerText = "No se pudo encontrar el país para la ciudad.";
-            return;
-        }
+        // Intentar obtener el país de la ciudad
+        pais = await obtenerDatosCiudad(destino) || pais;
+        
+        // Obtener el idioma y moneda del país
+        datosPais = await obtenerDatosPais(pais);
 
-        const datosPais = await obtenerDatosPais(pais);
+    } catch (error) {
+        console.error("Error al obtener datos de la ciudad o país:", error);
+    }
 
+    try {
+        // Intentar obtener el resumen de Wikipedia
         const response = await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(destino)}`);
         if (!response.ok) throw new Error("Error al obtener datos de Wikipedia");
 
@@ -120,9 +127,21 @@ async function cargarResumenDestino(destino) {
 
     } catch (error) {
         console.error("Error al cargar el resumen del destino:", error);
-        document.getElementById('descripcion-destino').innerText = "No se pudo cargar la información del destino.";
+        
+        // Mensaje alternativo que se mostrará si hay algún error
+        const mensajeAlternativo = `
+            <p>No se pudo cargar la información de ${destino}.</p>
+            <p>Aún puedes disfrutar de imágenes de este hermoso lugar.</p>
+            <p><strong>Moneda oficial:</strong> ${datosPais.moneda}</p>
+            <p><strong>Idioma oficial:</strong> ${datosPais.idioma}</p>
+        `;
+        
+        document.getElementById('descripcion-destino').innerHTML = mensajeAlternativo;
     }
 }
+
+
+
 
 async function cargarImagenesDestino(destino) {
     const apiKey = 'JYsFV9lbfdIrA9TYZ0QfFc6d61DFbbQub8lLLrplXYuIADPBYDp6XnC1';
