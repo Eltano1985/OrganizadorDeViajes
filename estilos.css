@@ -91,41 +91,41 @@ h1, h2 {
   border-radius: 4px;
 }
 
+/* Estilos para los botones */
 #trip-form button {
-  background-color: #4CAF50;
+  background-color: #4CAF50; /* Color para Planificar Viaje */
   color: white;
   padding: 0.7rem 1rem;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
+  cursor: pointer; /* Cambiar a mano al pasar el mouse */
+  flex: 1; /* Asegurar que ocupen el mismo tamaño */
+  margin: 0; /* Eliminar margen */
+}
+
+#more-info-btn {
+  background-color: #007BFF !important; /* Color azul específico para Más información */
+  color: white; /* Color del texto */
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer; /* Cambiar a mano al pasar el mouse */
 }
 
 #trip-form button:hover {
-  background-color: #45a049;
+  background-color: #45a049; /* Color al pasar el mouse para Planificar Viaje */
 }
+
+#more-info-btn:hover {
+  background-color: #0069d9; /* Color azul oscuro al pasar el mouse para Más información */
+}
+
 
 /* Sección de Itinerario */
 #itinerary {
   background-color: white;
   padding: 1.5rem;
   border-radius: 8px;
-}
-
-/* Estilos para el botón "Más información" */
-#more-info-btn {
-  background-color: #007BFF;
-  color: white;
-  padding: 0.7rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  display: inline-block;
-  margin-top: 1rem;
-  text-align: center;
-}
-
-#more-info-btn:hover {
-  background-color: #0069d9;
 }
 
 /* Estilo del pie de página */

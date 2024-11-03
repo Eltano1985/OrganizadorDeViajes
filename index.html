@@ -33,7 +33,10 @@
                         <label for="end-date">Fecha de Llegada</label>
                         <input type="date" id="end-date" name="end-date" required>
                     </div>
-                    <button id="plan-trip-btn" type="submit" disabled>Planificar Viaje</button>
+                    <div style="display: flex; gap: 10px;"> <!-- Contenedor flex para los botones -->
+                        <button id="plan-trip-btn" type="submit" disabled>Planificar Viaje</button>
+                        <button id="more-info-btn" type="button">Más información</button> <!-- Botón Más información -->
+                    </div>
                 </form>
                 <div id="itinerary-list"></div> <!-- Lista de itinerarios -->
             </div>
@@ -42,7 +45,6 @@
                 <h2>Actividades sugeridas</h2>
                 <div id="activities-list"></div> <!-- Contenedor para las actividades -->
                 <div id="selection-error" style="display: none; color: red;">Has alcanzado el límite de 10 actividades.</div>
-                <button id="more-info-btn">Más información</button> <!-- Botón Más información -->
             </div>
 
             <div id="map-section">
