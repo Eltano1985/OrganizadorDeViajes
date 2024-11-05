@@ -1,0 +1,47 @@
+class ImageCarousel {
+    constructor(destination, apiKey) {
+        this.destination = destination;
+        this.apiKey = apiKey;
+        this.images = [];
+        this.currentIndex = 0;
+    }
+
+    async loadImages() {
+        const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(this.destination)}&per_page=15`;
+
+        try {
+            const response = await fetch(url, { headers: { Authorization: this.apiKey } });
+            if (!response.ok) throw new Error("Error fetching images");
+
+            const data = await response.json();
+            this.images = data.photos.map(photo => photo.src.medium);
+            this.displayImage();
+            this.addEventListeners();
+        } catch (error) {
+            console.error("Error loading images:", error);
+            document.getElementById('carousel-image').alt = "No images available for this destination.";
+        }
+    }
+
+    displayImage() {
+        const carouselImage = document.getElementById('carousel-image');
+        carouselImage.src = this.images[this.currentIndex];
+    }
+
+    addEventListeners() {
+        document.getElementById('next-btn').addEventListener('click', () => this.nextImage());
+        document.getElementById('prev-btn').addEventListener('click', () => this.prevImage());
+    }
+
+    nextImage() {
+        this.currentIndex = (this.currentIndex + 1) % this.images.length;
+        this.displayImage();
+    }
+
+    prevImage() {
+        this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+        this.displayImage();
+    }
+}
+
+export default ImageCarousel;
