@@ -13,10 +13,27 @@ header {
   background-color: #4CAF50;
   color: white;
   padding: 1rem;
-  text-align: center;
+  text-align: left; /* Alinear el texto a la izquierda */
   width: 100%;
 }
 
+.header-container {
+  display: flex;
+  justify-content: space-between; /* Espacio entre el título y el QR */
+  align-items: center; /* Centrar verticalmente */
+  padding: 0 20px; /* Margen a los costados */
+}
+
+.header-container h1 {
+  margin: 0; /* Eliminar margen por defecto */
+}
+
+#qr-code {
+  text-align: center;
+  margin-top: 0; /* Eliminar margen superior */
+}
+
+/* Estilos para el contenido principal */
 main {
   flex: 1; /* Para que el main ocupe todo el espacio restante */
   padding: 2rem;
@@ -96,48 +113,48 @@ h1, h2 {
   border-radius: 4px;
 }
 
+/* Estilos para los botones */
 #trip-form button {
-  background-color: #4CAF50;
+  background-color: #4CAF50; /* Color para Planificar Viaje */
   color: white;
   padding: 0.7rem 1rem;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
+  cursor: pointer; /* Cambiar a mano al pasar el mouse */
+  flex: 1; /* Asegurar que ocupen el mismo tamaño */
+  margin: 0; /* Eliminar margen */
+}
+
+#more-info-btn {
+  background-color: #007BFF !important; /* Color azul específico para Más información */
+  color: white; /* Color del texto */
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer; /* Cambiar a mano al pasar el mouse */
 }
 
 #trip-form button:hover {
-  background-color: #45a049;
+  background-color: #45a049; /* Color al pasar el mouse para Planificar Viaje */
 }
+
+#more-info-btn:hover {
+  background-color: #0069d9; /* Color azul oscuro al pasar el mouse para Más información */
+}
+
 
 /* Sección de Itinerario */
 #itinerary {
   background-color: white;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#itinerary-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 1rem;
-  justify-content: flex-start;
-}
-
-/* Footer */
+/* Estilo del pie de página */
 footer {
   text-align: center;
   padding: 1rem;
   background-color: #4CAF50;
   color: white;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
-
-/* Estilos para las casillas de verificación */
-.item label {
-  margin-top: 5px;
-  font-size: 14px;
+  margin-top: auto;
 }

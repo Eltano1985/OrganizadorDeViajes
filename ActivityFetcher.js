@@ -1,21 +1,26 @@
 class ActivityFetcher {
-    static fetchActivities(lat, lon) {
-        const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];node(around:5000,${lat},${lon})[tourism];out;`;
-        const pexelsApiKey = 'JYsFV9lbfdIrA9TYZ0QfFc6d61DFbbQub8lLLrplXYuIADPBYDp6XnC1'; // Reemplaza con tu clave API de Pexels
-        const pexelsUrl = `https://api.pexels.com/v1/search?query=${encodeURIComponent(destination)}&per_page=10&page=1`;
+    static fetchActivities(destination) {
+        const foursquareApiKey = 'fsq3LTq26zit3XsJ0g36ORlV5EShWfAlN0zh0YUPPAjE+RE='; // Reemplaza con tu clave de Foursquare
+        const url = `https://api.foursquare.com/v3/places/search?near=${encodeURIComponent(destination)}&limit=15`;
 
-        return Promise.all([
-            fetch(overpassUrl).then(response => response.json()),
-            fetch(pexelsUrl, {
-                headers: {
-                    Authorization: pexelsApiKey,
-                },
-            }).then(response => response.json())
-        ]).then(([activitiesData, imagesData]) => {
-            return { activitiesData, imagesData };
-        }).catch(error => {
-            console.error('Error al obtener las actividades o imágenes:', error);
-            throw new Error('Ocurrió un error al obtener las actividades o imágenes.');
+        return fetch(url, {
+            headers: {
+                Authorization: foursquareApiKey,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de la API: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => data.results) // Asegúrate de que el resultado sea un array de lugares
+        .catch(error => {
+            console.error('Error al obtener las actividades:', error);
+            throw new Error('Ocurrió un error al obtener los sitios de interés.');
         });
     }
-}
+  }
+
+export default  ActivityFetcher

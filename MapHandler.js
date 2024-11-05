@@ -20,21 +20,21 @@ class MapHandler {
         this.marker = L.marker([lat, lon]).addTo(this.map).bindPopup(`Destino: ${destination}`).openPopup();
     }
   
-    addActivityMarker(lat, lon, placeName) {
+    addActivityMarker(lat, lon, placeName, index) {
         // Añadir un marcador para actividades seleccionadas
-        const activityMarker = L.marker([lat, lon]).addTo(this.map).bindPopup(placeName);
+        const activityMarker = L.marker([lat, lon]).addTo(this.map).bindPopup(`Actividad ${index}: ${placeName}`);
         this.activityMarkers.push(activityMarker); // Almacenar el marcador en el array
+    }
+
+    removeActivityMarkers() {
+        // Eliminar todos los marcadores de actividades
+        this.activityMarkers.forEach(marker => marker.remove());
+        this.activityMarkers = []; // Limpiar el array
     }
   
     setView(lat, lon) {
         this.map.setView([lat, lon], 12);
     }
-
-    // Método para eliminar todos los marcadores de actividades
-    clearActivityMarkers() {
-        this.activityMarkers.forEach(marker => marker.remove());
-        this.activityMarkers = []; // Resetear el array
-    }
 }
-
+  
 export default MapHandler;
