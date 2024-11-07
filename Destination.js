@@ -5,6 +5,10 @@ class Destination {
         this.restCountriesApiUrl = 'https://restcountries.com/v3.1/name/';
     }
 
+    /**
+    Loads data for the selected destination, including the destination name, corresponding country, additional information, and a carousel of images 
+     * @returns the information and images of the destination as long as a destination is entered
+     */
     async loadDestinationData() {
         if (!this.name) {
             alert("No se ha seleccionado ningún destino.");
@@ -20,11 +24,18 @@ class Destination {
         imageCarousel.loadImages();
     }
 
+    /**
+    Display the target name in two DOM elements
+     */
     displayDestinationName() {
         document.getElementById('destino-titulo').innerText = this.name;
         document.getElementById('destino-titulo2').innerText = this.name;
     }
-
+ 
+    /**
+    Gets the country name corresponding to the destination using the GeoNames API
+     * @returns the country name if found, or "null" if an error occurs while fetching the data
+     */
     async getCountry() {
         const url = `http://api.geonames.org/searchJSON?q=${encodeURIComponent(this.name)}&maxRows=1&username=${this.geoNamesUsername}`;
 
@@ -42,6 +53,11 @@ class Destination {
         }
     }
 
+    /**
+    Gets a country's language and currency information from the Rest Countries API
+     * @param {string} country name to obtain the information
+     * @returns the language and currency in spanish if it finds the country, otherwise it returns language and currency not available 
+     */
     async getCountryData(country) {
         if (!country) return { language: "No disponible", currency: "No disponible" };
 
@@ -60,29 +76,41 @@ class Destination {
         }
     }
 
+    /**
+    Translates an english language name to its equivalent in spanish
+     * @param {string} language name in english 
+     * @returns the name of the language in spanish
+     */
     getLanguageInSpanish(language) {
         const languagesInSpanish = {
             "English": "Inglés",
             "Spanish": "Español",
             "French": "Francés",
-            "German": "Alemán",
-            // Agrega otros idiomas aquí según sea necesario
+            "German": "Alemán",          
         };
         return languagesInSpanish[language] || language;
     }
 
+    /**
+    Convert the name of a currency in english to its equivalent in spanish
+     * @param {string} currency name in english that you want to convert to spanish 
+     * @returns the name of the currency in spanish
+     */
     getCurrencyInSpanish(currency) {
         const currenciesInSpanish = {
             "Dollar": "Dólar",
             "Euro": "Euro",
             "Pound": "Libra",
             "Yen": "Yen",
-            "Peso": "Peso",
-            // Agrega otras monedas aquí según sea necesario
+            "Peso": "Peso",           
         };
         return currenciesInSpanish[currency] || currency;
     }
 
+   /**
+    Display a summary of the destination taken from Wikipedia and information about the language and currency
+    * @param {string} param0 the official language and official currency of the destination in spanish
+    */
     async displaySummary({ language, currency }) {
         try {
             const response = await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(this.name)}`);

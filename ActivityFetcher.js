@@ -1,10 +1,10 @@
 class ActivityFetcher {
-    
-    /**Gets a list of up to 15 activities or places of interest near a specific destination using the Foursquare API.
+
+    /**
+    Gets a list of up to 15 activities or places of interest near a specific destination using the Foursquare API
      * @param {string} destination place of interest
      * @returns up to 15 activities or places of interest
      */
-    
     static fetchActivities(destination) {
         const foursquareApiKey = 'fsq3LTq26zit3XsJ0g36ORlV5EShWfAlN0zh0YUPPAjE+RE=';
         const url = `https://api.foursquare.com/v3/places/search?near=${encodeURIComponent(destination)}&limit=15`;
