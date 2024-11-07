@@ -31,7 +31,7 @@ class Destination {
         document.getElementById('destino-titulo').innerText = this.name;
         document.getElementById('destino-titulo2').innerText = this.name;
     }
- 
+
     /**
     Gets the country name corresponding to the destination using the GeoNames API
      * @returns the country name if found, or "null" if an error occurs while fetching the data
@@ -55,9 +55,9 @@ class Destination {
 
     /**
     Gets a country's language and currency information from the Rest Countries API
-     * @param {string} country name to obtain the information
-     * @returns the language and currency in spanish if it finds the country, otherwise it returns language and currency not available 
-     */
+    * @param {string} country name to obtain the information
+    * @returns the language and currency in Spanish if it finds the country, otherwise it returns "No disponible" for both.
+    */
     async getCountryData(country) {
         if (!country) return { language: "No disponible", currency: "No disponible" };
 
@@ -66,7 +66,9 @@ class Destination {
             if (!response.ok) throw new Error("Error al obtener datos del país");
 
             const data = await response.json();
-            const language = this.getLanguageInSpanish(Object.values(data[0].languages)[0] || 'No disponible');
+            // Verificar si el español está en los idiomas disponibles y establecerlo como idioma oficial
+            const languages = Object.values(data[0].languages);
+            let language = languages.includes("Spanish") || languages.includes("Español") ? "Español" : this.getLanguageInSpanish(languages[0] || 'No disponible');
             const currency = this.getCurrencyInSpanish(data[0].currencies[Object.keys(data[0].currencies)[0]].name || 'No disponible');
 
             return { language, currency };
@@ -75,6 +77,7 @@ class Destination {
             return { language: "No disponible", currency: "No disponible" };
         }
     }
+
 
     /**
     Translates an english language name to its equivalent in spanish
@@ -86,7 +89,8 @@ class Destination {
             "English": "Inglés",
             "Spanish": "Español",
             "French": "Francés",
-            "German": "Alemán",          
+            "German": "Alemán",
+            "Portuguese": "Portugués"
         };
         return languagesInSpanish[language] || language;
     }
@@ -102,15 +106,18 @@ class Destination {
             "Euro": "Euro",
             "Pound": "Libra",
             "Yen": "Yen",
-            "Peso": "Peso",           
+            "Peso": "Peso",
+            "Brazilian real": "Real",
+            "Uruguayan peso": "peso uruguayo",
+            "Mexican peso": "peso mexicano"
         };
         return currenciesInSpanish[currency] || currency;
     }
 
-   /**
-    Display a summary of the destination taken from Wikipedia and information about the language and currency
-    * @param {string} param0 the official language and official currency of the destination in spanish
-    */
+    /**
+     Display a summary of the destination taken from Wikipedia and information about the language and currency
+     * @param {string} param0 the official language and official currency of the destination in spanish
+     */
     async displaySummary({ language, currency }) {
         try {
             const response = await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(this.name)}`);
