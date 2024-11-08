@@ -6,8 +6,8 @@ class Destination {
     }
 
     /**
-    Loads data for the selected destination, including the destination name, corresponding country, additional information, and a carousel of images 
-     * @returns the information and images of the destination as long as a destination is entered
+     Loads data for the selected destination, including the destination name, corresponding country, additional information, and a carousel of images 
+     * @returns empty when destination is not entered
      */
     async loadDestinationData() {
         if (!this.name) {
@@ -25,7 +25,7 @@ class Destination {
     }
 
     /**
-    Display the target name in two DOM elements
+     Display the target name in two DOM elements
      */
     displayDestinationName() {
         document.getElementById('destino-titulo').innerText = this.name;
@@ -33,7 +33,7 @@ class Destination {
     }
 
     /**
-    Gets the country name corresponding to the destination using the GeoNames API
+     Gets the country name corresponding to the destination using the GeoNames API
      * @returns the country name if found, or "null" if an error occurs while fetching the data
      */
     async getCountry() {
@@ -54,10 +54,10 @@ class Destination {
     }
 
     /**
-    Gets a country's language and currency information from the Rest Countries API
-    * @param {string} country name to obtain the information
-    * @returns the language and currency in Spanish if it finds the country, otherwise it returns "No disponible" for both.
-    */
+     Gets a country's language and currency information from the Rest Countries API
+     * @param {string} country name to obtain the information
+     * @returns the language and currency in Spanish if it finds the country, otherwise it returns "No disponible" for both.
+     */
     async getCountryData(country) {
         if (!country) return { language: "No disponible", currency: "No disponible" };
 
@@ -80,7 +80,7 @@ class Destination {
 
 
     /**
-    Translates an english language name to its equivalent in spanish
+     Translates an english language name to its equivalent in spanish
      * @param {string} language name in english 
      * @returns the name of the language in spanish
      */
@@ -96,7 +96,7 @@ class Destination {
     }
 
     /**
-    Convert the name of a currency in english to its equivalent in spanish
+     Convert the name of a currency in english to its equivalent in spanish
      * @param {string} currency name in english that you want to convert to spanish 
      * @returns the name of the currency in spanish
      */
