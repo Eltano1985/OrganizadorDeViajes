@@ -1,6 +1,8 @@
 import TripPlanner from "./TripPlanner.js";
 
-// Inicializar el planificador de viajes al cargar la página
+/**
+ * Event that is executed when the document content has been completely loaded. Checks if the map container is present in the DOM and if so initializes the trip planner. Otherwise, it displays an error message in the console.
+ */
 document.addEventListener('DOMContentLoaded', () => {
   const mapContainer = document.getElementById('map');
   
