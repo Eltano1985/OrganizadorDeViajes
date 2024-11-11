@@ -6,81 +6,89 @@ class TripPlanner {
         this.mapHandler = new MapHandler(mapId);
         this.form = document.getElementById('itinerary-form');
         this.itineraryList = document.getElementById('itinerary-list');
-        this.activitiesList = document.getElementById('activities-list'); // Contenedor para las actividades
+        this.activitiesList = document.getElementById('activities-list');
         this.planTripBtn = document.getElementById('plan-trip-btn');
         this.selectionError = document.getElementById('selection-error');
         this.moreInfoBtn = document.getElementById('more-info-btn');
 
         this.selectedPlaces = [];
-        this.activitiesCoordinates = []; // Array para almacenar coordenadas de actividades
+        this.activitiesCoordinates = [];
         this.bindEvents();
     }
-
+    
+    /**
+     * Adds event handlers to key elements: the trip planning form, the destination field and the more Information button
+     */
     bindEvents() {
         this.form.addEventListener('submit', (event) => this.handleFormSubmit(event));
         document.getElementById('destination').addEventListener('blur', (event) => this.geocodeDestination(event.target.value));
         this.moreInfoBtn.addEventListener('click', () => this.showMoreInfo());
     }
 
+    /**
+     * Validates the input fields and checks if there is at least one activity selected. If all data is valid, store the destination in localStorage. Create a new item in the itinerary, and restart the form. In case of missing data or activities, it shows alerts to the user
+     * @param {event} event 
+     * @returns empty at the end of validation
+     */
     handleFormSubmit(event) {
         event.preventDefault();
-        
+
         const destination = document.getElementById('destination').value;
         const startDate = document.getElementById('start-date').value;
         const endDate = document.getElementById('end-date').value;
         const selectedActivities = this.selectedPlaces.join(', ');
-        
-        // Trazabilidad para verificar los valores
+
         console.log('Destino:', destination);
         console.log('Fecha de inicio:', startDate);
         console.log('Fecha de fin:', endDate);
         console.log('Actividades seleccionadas:', selectedActivities);
         console.log('Número de actividades seleccionadas:', this.selectedPlaces.length);
-        
-        // Validar que todos los campos estén completos
+
         if (!destination || !startDate || !endDate) {
-            alert("Por favor, completa todos los campos antes de planificar el viaje."); // Alerta si falta información
-            return; // Salir de la función si hay campos incompletos
+            alert("Por favor, completa todos los campos antes de planificar el viaje."); 
+            return;
         }
-        
+
         if (this.selectedPlaces.length === 0) {
-            alert("Por favor, selecciona al menos una actividad."); // Alerta si no hay actividades seleccionadas
-            return; // Salir de la función si no hay actividades seleccionadas
+            alert("Por favor, selecciona al menos una actividad."); 
+            return;
         }
-        
-        // Guardar el destino en localStorage
+
         localStorage.setItem('destination', destination);
-        
+
         this.createItineraryItem(destination, startDate, endDate, selectedActivities);
-        
-        // Limpiar el formulario y reiniciar la lista de selección
+
         this.form.reset();
         this.activitiesList.innerHTML = '';
         this.planTripBtn.disabled = true;
         this.selectedPlaces = [];
-        this.activitiesCoordinates = []; // Resetear las coordenadas al finalizar el viaje
+        this.activitiesCoordinates = [];
     }
-    
 
+    /**
+     * Builds an itinerary element that includes the destination, start and end date (in "DD/MM/YYYY" format), and a numbered list of selected activities. Adds a button to delete the created itinerary
+     * @param {string} destination 
+     * @param {string} startDate 
+     * @param {string} endDate 
+     * @param {Array<string>} activities 
+     */
     createItineraryItem(destination, startDate, endDate, activities) {
         const itineraryItem = document.createElement('div');
         itineraryItem.classList.add('itinerary-item');
-        
-        // Función para formatear la fecha en formato día, mes y año
+
         const formatDate = (dateString) => {
             const date = new Date(dateString);
-            const day = date.getDate().toString().padStart(2, '0'); // Día con 2 dígitos
-            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Mes con 2 dígitos (suma 1 porque getMonth es 0-indexado)
-            const year = date.getFullYear(); // Año completo
-            return `${day}/${month}/${year}`; // Retorna en formato "DD/MM/YYYY"
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
         };
-        
+
         const formattedStartDate = formatDate(startDate);
         const formattedEndDate = formatDate(endDate);
-        
-        // Convertir la lista de actividades en HTML numerado
+
         const activitiesListHtml = this.selectedPlaces.map((place, index) => `<li>${index + 1}. ${place}</li>`).join('');
-        
+
         itineraryItem.innerHTML = `
             <h3>Destino: ${destination}</h3>
             <p><strong>Fecha de inicio:</strong> ${formattedStartDate}</p>
@@ -89,18 +97,20 @@ class TripPlanner {
             <ul>${activitiesListHtml}</ul>
             <button class="delete-btn">Eliminar</button>
         `;
-        
+
         this.itineraryList.appendChild(itineraryItem);
-    
+
         const deleteBtn = itineraryItem.querySelector('.delete-btn');
         deleteBtn.addEventListener('click', () => this.deleteItinerary(itineraryItem));
     }
-    
-    
 
+    /**
+     * Geocodes the name of a destination to obtain its latitude and longitude. Use the Nominatim API to find the destination coordinates. If coordinates are found, center the map on the location and add a marker. It also clears the list of previous activities and loads activity images
+     * @param {string} destination 
+     */
     geocodeDestination(destination) {
         const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destination)}`;
-      
+
         fetch(geocodeUrl)
             .then(response => response.json())
             .then(data => {
@@ -110,7 +120,7 @@ class TripPlanner {
                     const lon = data[0].lon;
                     this.mapHandler.setView(lat, lon);
                     this.mapHandler.addMarker(lat, lon, destination);
-                    this.activitiesList.innerHTML = ''; // Limpiar actividades anteriores
+                    this.activitiesList.innerHTML = '';
                     this.fetchActivitiesImages(destination);
                 } else {
                     alert('No se encontró el destino.');
@@ -122,14 +132,18 @@ class TripPlanner {
             });
     }
 
+    /**
+     * Obtains and displays places of interest related to a destination. Updates the list of activities with a load message, then fetches the activities using the `ActivityFetcher` class. If activities are found, it displays them; If not, it displays a message indicating that there are no results
+     * @param {string} destination 
+     */
     fetchActivitiesImages(destination) {
         this.activitiesList.innerHTML = '<p>Cargando sitios de interés...</p>';
-        
+
         ActivityFetcher.fetchActivities(destination)
             .then(places => {
-                this.activitiesList.innerHTML = ''; // Limpiar mensaje de carga
+                this.activitiesList.innerHTML = ''; 
                 if (places.length > 0) {
-                    this.displayInterestSites(places); // Mostrar los sitios de interés
+                    this.displayInterestSites(places);
                 } else {
                     this.activitiesList.innerHTML = 'No se encontraron sitios de interés para este destino.';
                 }
@@ -140,9 +154,13 @@ class TripPlanner {
             });
     }
 
+    /**
+     * Displays places of interest in the activities list and adds checkboxes so the user can select specific activities. Update the coordinates of the activities and establish event listeners for each box
+     * @param {Array<Object>} places 
+     */
     displayInterestSites(places) {
-        this.activitiesCoordinates = []; // Limpiar coordenadas antes de mostrar nuevos sitios
-     
+        this.activitiesCoordinates = [];
+
         places.forEach((place, index) => {
             const placeName = place.name;
             const lat = place.geocodes.main.latitude;
@@ -152,7 +170,7 @@ class TripPlanner {
             checkbox.type = 'checkbox';
             checkbox.value = placeName;
             checkbox.id = `place-${index}`;
-            checkbox.addEventListener('change', () => this.handleCheckboxChange(checkbox, placeName, lat, lon, index)); // Pasar el índice
+            checkbox.addEventListener('change', () => this.handleCheckboxChange(checkbox, placeName, lat, lon, index));
 
             const label = document.createElement('label');
             label.htmlFor = `place-${index}`;
@@ -166,8 +184,15 @@ class TripPlanner {
             this.activitiesList.appendChild(div);
         });
     }
-
-    handleCheckboxChange(checkbox, placeName, lat, lon, index) { // Añadir índice aquí
+    /**
+     * Handle the change of state of the checkboxes (checked or unchecked) for the selected activities. Update lists of selected activities and their coordinates, manage markers on the map and shows an error if the 10 selected activities are exceeded
+     * @param {HTMLInputElement} checkbox 
+     * @param {string} placeName 
+     * @param {number} lat 
+     * @param {number} lon 
+     * @param {number} index 
+     */
+    handleCheckboxChange(checkbox, placeName, lat, lon, index) { 
         if (checkbox.checked) {
             if (this.selectedPlaces.length < 10) {
                 this.selectedPlaces.push(placeName);
@@ -185,28 +210,32 @@ class TripPlanner {
                 this.activitiesCoordinates = this.activitiesCoordinates.filter(coord => coord.name !== placeName);
             }
             this.selectionError.style.display = 'none';
-            this.mapHandler.removeActivityMarkers(); // Remover todos los marcadores
-    
-            // Agregar de nuevo los marcadores con los índices actualizados
-            this.activitiesCoordinates.forEach((coord, i) => 
-                this.mapHandler.addActivityMarker(coord.lat, coord.lon, coord.name, i + 1) // Usar el índice + 1 aquí
+            this.mapHandler.removeActivityMarkers();
+
+            this.activitiesCoordinates.forEach((coord, i) =>
+            this.mapHandler.addActivityMarker(coord.lat, coord.lon, coord.name, i + 1)
             );
         }
-    
-        this.planTripBtn.disabled = this.selectedPlaces.length === 0; // Deshabilitar el botón si no hay actividades
-    }
-    
 
+        this.planTripBtn.disabled = this.selectedPlaces.length === 0;
+    }
+
+    /**
+     * Redirects the user to the more information page
+     */
     showMoreInfo() {
-        // Redireccionar a la página de información
         window.location.href = 'masinformacion.html';
     }
-    
+
+    /**
+     * Removes the itinerary item from the activity list, removes the map marker if it exists, and resets the map marker variable to `null`.
+     * @param {HTMLElement} itineraryItem 
+     */
     deleteItinerary(itineraryItem) {
         itineraryItem.remove();
         if (this.mapHandler.marker) {
-            this.mapHandler.marker.remove(); // Elimina el marcador del mapa
-            this.mapHandler.marker = null; // Restablecer la variable marker
+            this.mapHandler.marker.remove();
+            this.mapHandler.marker = null;
         }
     }
 }

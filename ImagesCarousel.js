@@ -10,17 +10,15 @@ class ImagesCarousel {
      * Load images from the entered destination using the pexels API key
      */
     async loadImages() {
-        const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(this.destination)}&per_page=15`;
+        const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(this.destination)}&per_page=30`;
 
         try {
             const response = await fetch(url, { headers: { Authorization: this.apiKey } });
             if (!response.ok) throw new Error("Error fetching images");
 
             const data = await response.json();
-            // Extrae las URLs de las imágenes de la respuesta de la API
             this.images = data.photos.map(photo => photo.src.medium);
 
-            // Verifica si hay imágenes y muestra la primera, o un mensaje alternativo
             if (this.images.length > 0) {
                 this.displayImage();
                 this.addEventListeners();
@@ -71,7 +69,7 @@ class ImagesCarousel {
     showNoImagesMessage() {
         const carouselImage = document.getElementById('carousel-image');
         carouselImage.alt = "No images available for this destination.";
-        carouselImage.src = ""; // Deja el src vacío si no hay imágenes disponibles
+        carouselImage.src = "";
     }
 }
 
