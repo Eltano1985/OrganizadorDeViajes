@@ -87,6 +87,15 @@ class TripPlanner {
 
         const activitiesListHtml = this.selectedPlaces.map((place, index) => `<li>${index + 1}. ${place}</li>`).join('');
 
+        this.createTripCard(itineraryItem, destination, formattedStartDate, formattedEndDate, activitiesListHtml);
+
+        this.itineraryList.appendChild(itineraryItem);
+
+        const deleteBtn = itineraryItem.querySelector('.delete-btn');
+        deleteBtn.addEventListener('click', () => this.deleteItinerary(itineraryItem));
+    }
+
+    createTripCard(itineraryItem, destination, formattedStartDate, formattedEndDate, activitiesListHtml) {
         itineraryItem.innerHTML = `
             <h3>Destino: ${destination}</h3>
             <p><strong>Fecha de inicio:</strong> ${formattedStartDate}</p>
@@ -95,11 +104,6 @@ class TripPlanner {
             <ul>${activitiesListHtml}</ul>
             <button class="delete-btn">Eliminar</button>
         `;
-
-        this.itineraryList.appendChild(itineraryItem);
-
-        const deleteBtn = itineraryItem.querySelector('.delete-btn');
-        deleteBtn.addEventListener('click', () => this.deleteItinerary(itineraryItem));
     }
 
     /**
