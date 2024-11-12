@@ -38,12 +38,6 @@ class TripPlanner {
         const endDate = document.getElementById('end-date').value;
         const selectedActivities = this.selectedPlaces.join(', ');
 
-        console.log('Destino:', destination);
-        console.log('Fecha de inicio:', startDate);
-        console.log('Fecha de fin:', endDate);
-        console.log('Actividades seleccionadas:', selectedActivities);
-        console.log('Número de actividades seleccionadas:', this.selectedPlaces.length);
-
         if (!destination || !startDate || !endDate) {
             alert("Por favor, completa todos los campos antes de planificar el viaje."); 
             return;
@@ -58,6 +52,10 @@ class TripPlanner {
 
         this.createItineraryItem(destination, startDate, endDate, selectedActivities);
 
+        this.refreshActivityList();
+    }
+
+    refreshActivityList() {
         this.form.reset();
         this.activitiesList.innerHTML = '';
         this.planTripBtn.disabled = true;
