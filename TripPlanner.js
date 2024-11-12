@@ -54,7 +54,10 @@ class TripPlanner {
 
         this.refreshActivityList();
     }
-
+    
+    /**
+     * Reset the list of activities
+     */
     refreshActivityList() {
         this.form.reset();
         this.activitiesList.innerHTML = '';
@@ -64,7 +67,7 @@ class TripPlanner {
     }
 
     /**
-     * Builds an itinerary element that includes the destination, start and end date (in "DD/MM/YYYY" format), and a numbered list of selected activities. Adds a button to delete the created itinerary
+     * Creates an itinerary element that includes the destination, start and end date (in "DD/MM/YYYY" format), and a numbered list of selected activities. Adds a button to delete the created itinerary
      * @param {string} destination 
      * @param {string} startDate 
      * @param {string} endDate 
@@ -74,8 +77,8 @@ class TripPlanner {
         const itineraryItem = document.createElement('div');
         itineraryItem.classList.add('itinerary-item');
 
-        const formattedStartDate = formatDate(startDate);
-        const formattedEndDate = formatDate(endDate);
+        const formattedStartDate = this.formatDate(startDate);
+        const formattedEndDate = this.formatDate(endDate);
 
         const activitiesListHtml = this.selectedPlaces.map((place, index) => `<li>${index + 1}. ${place}</li>`).join('');
 
@@ -87,6 +90,11 @@ class TripPlanner {
         deleteBtn.addEventListener('click', () => this.deleteItinerary(itineraryItem));
     }
 
+    /**
+     * Formats the date in day, month and year
+     * @param {string} dateString 
+     * @returns returns the date in DD/MM/YYYY
+     */
     formatDate(dateString) {
         const date = new Date(dateString);
         const day = date.getDate().toString().padStart(2, '0');
@@ -95,6 +103,14 @@ class TripPlanner {
         return `${day}/${month}/${year}`;
     }
 
+    /**
+     * Create a travel card with the list of activities
+     * @param {HTMLElement} itineraryItem 
+     * @param {string} destination 
+     * @param {string} formattedStartDate 
+     * @param {string} formattedEndDate 
+     * @param {string} activitiesListHtml 
+     */
     createTripCard(itineraryItem, destination, formattedStartDate, formattedEndDate, activitiesListHtml) {
         itineraryItem.innerHTML = `
             <h3>Destino: ${destination}</h3>
@@ -129,6 +145,11 @@ class TripPlanner {
             });
     }
 
+    /**
+     * Adds the position on the map and displays a marker at the destination. Then, clears the activity list and uploads new activity images for the destination
+     * @param {Array<Object>} data 
+     * @param {string} destination 
+     */
     addMapPosittion(data, destination) {
         const lat = data[0].lat;
         const lon = data[0].lon;
@@ -172,24 +193,40 @@ class TripPlanner {
             const lat = place.geocodes.main.latitude;
             const lon = place.geocodes.main.longitude;
 
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.value = placeName;
-            checkbox.id = `place-${index}`;
-            checkbox.addEventListener('change', () => this.handleCheckboxChange(checkbox, placeName, lat, lon, index));
+            const checkbox = this.createInputSite(placeName, index, lat, lon);
 
-            const label = document.createElement('label');
-            label.htmlFor = `place-${index}`;
-            label.textContent = placeName;
+            const label = this.createLabelSite(index, placeName);
 
-            const div = document.createElement('div');
-            div.classList.add('activity-item');
-            div.appendChild(checkbox);
-            div.appendChild(label);
+            this.insertSite(checkbox, label);
 
-            this.activitiesList.appendChild(div);
+            
         });
     }
+    
+    insertSite(checkbox, label) {
+        const div = document.createElement('div');
+        div.classList.add('activity-item');
+        div.appendChild(checkbox);
+        div.appendChild(label);
+        this.activitiesList.appendChild(div);
+        }
+
+    createLabelSite(index, placeName) {
+        const label = document.createElement('label');
+        label.htmlFor = `place-${index}`;
+        label.textContent = placeName;
+        return label;
+    }
+
+    createInputSite(placeName, index, lat, lon) {
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = placeName;
+        checkbox.id = `place-${index}`;
+        checkbox.addEventListener('change', () => this.handleCheckboxChange(checkbox, placeName, lat, lon, index));
+        return checkbox;
+    }
+
     /**
      * Handle the change of state of the checkboxes (checked or unchecked) for the selected activities. Update lists of selected activities and their coordinates, manage markers on the map and shows an error if the 10 selected activities are exceeded
      * @param {HTMLInputElement} checkbox 
