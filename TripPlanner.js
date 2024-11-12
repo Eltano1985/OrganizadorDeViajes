@@ -15,7 +15,7 @@ class TripPlanner {
         this.activitiesCoordinates = [];
         this.bindEvents();
     }
-    
+
     /**
      * Adds event handlers to key elements: the trip planning form, the destination field and the more Information button
      */
@@ -39,12 +39,12 @@ class TripPlanner {
         const selectedActivities = this.selectedPlaces.join(', ');
 
         if (!destination || !startDate || !endDate) {
-            alert("Por favor, completa todos los campos antes de planificar el viaje."); 
+            alert("Por favor, completa todos los campos antes de planificar el viaje.");
             return;
         }
 
         if (this.selectedPlaces.length === 0) {
-            alert("Por favor, selecciona al menos una actividad."); 
+            alert("Por favor, selecciona al menos una actividad.");
             return;
         }
 
@@ -74,14 +74,6 @@ class TripPlanner {
         const itineraryItem = document.createElement('div');
         itineraryItem.classList.add('itinerary-item');
 
-        const formatDate = (dateString) => {
-            const date = new Date(dateString);
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
-        };
-
         const formattedStartDate = formatDate(startDate);
         const formattedEndDate = formatDate(endDate);
 
@@ -93,6 +85,14 @@ class TripPlanner {
 
         const deleteBtn = itineraryItem.querySelector('.delete-btn');
         deleteBtn.addEventListener('click', () => this.deleteItinerary(itineraryItem));
+    }
+
+    formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
     }
 
     createTripCard(itineraryItem, destination, formattedStartDate, formattedEndDate, activitiesListHtml) {
@@ -118,12 +118,7 @@ class TripPlanner {
             .then(data => {
                 console.log('Geocoding response:', data);
                 if (data.length > 0) {
-                    const lat = data[0].lat;
-                    const lon = data[0].lon;
-                    this.mapHandler.setView(lat, lon);
-                    this.mapHandler.addMarker(lat, lon, destination);
-                    this.activitiesList.innerHTML = '';
-                    this.fetchActivitiesImages(destination);
+                    this.addMapPosittion(data, destination);
                 } else {
                     alert('No se encontró el destino.');
                 }
@@ -132,6 +127,15 @@ class TripPlanner {
                 console.error('Error al obtener la ubicación:', error);
                 alert('Ocurrió un error al intentar encontrar la ubicación.');
             });
+    }
+
+    addMapPosittion(data, destination) {
+        const lat = data[0].lat;
+        const lon = data[0].lon;
+        this.mapHandler.setView(lat, lon);
+        this.mapHandler.addMarker(lat, lon, destination);
+        this.activitiesList.innerHTML = '';
+        this.fetchActivitiesImages(destination);
     }
 
     /**
@@ -143,7 +147,7 @@ class TripPlanner {
 
         ActivityFetcher.fetchActivities(destination)
             .then(places => {
-                this.activitiesList.innerHTML = ''; 
+                this.activitiesList.innerHTML = '';
                 if (places.length > 0) {
                     this.displayInterestSites(places);
                 } else {
@@ -194,7 +198,7 @@ class TripPlanner {
      * @param {number} lon 
      * @param {number} index 
      */
-    handleCheckboxChange(checkbox, placeName, lat, lon, index) { 
+    handleCheckboxChange(checkbox, placeName, lat, lon, index) {
         if (checkbox.checked) {
             if (this.selectedPlaces.length < 10) {
                 this.selectedPlaces.push(placeName);
@@ -215,7 +219,7 @@ class TripPlanner {
             this.mapHandler.removeActivityMarkers();
 
             this.activitiesCoordinates.forEach((coord, i) =>
-            this.mapHandler.addActivityMarker(coord.lat, coord.lon, coord.name, i + 1)
+                this.mapHandler.addActivityMarker(coord.lat, coord.lon, coord.name, i + 1)
             );
         }
 
