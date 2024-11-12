@@ -203,6 +203,11 @@ class TripPlanner {
         });
     }
     
+    /**
+     * This function creates a `div` container for a site of interest and then adds the `checkbox` and `label` elements to the container. Finally, it inserts the container into the activity list
+     * @param {HTMLElement} checkbox 
+     * @param {HTMLElement} label 
+     */
     insertSite(checkbox, label) {
         const div = document.createElement('div');
         div.classList.add('activity-item');
@@ -210,7 +215,13 @@ class TripPlanner {
         div.appendChild(label);
         this.activitiesList.appendChild(div);
         }
-
+    
+    /**
+     * Creates and returns a label element for a location of interest
+     * @param {number} index 
+     * @param {string} placeName 
+     * @returns {HTMLLabelElement}
+     */
     createLabelSite(index, placeName) {
         const label = document.createElement('label');
         label.htmlFor = `place-${index}`;
@@ -218,6 +229,14 @@ class TripPlanner {
         return label;
     }
 
+    /**
+     * Creates an `input` checkbox configured with a unique ID and a value corresponding to the site name. A `change` event is also added to it that calls `handleCheckboxChange` when its selected state is changed.
+     * @param {string} placeName 
+     * @param {number} index 
+     * @param {number} lat 
+     * @param {number} lon 
+     * @returns {HTMLInputElement}
+     */
     createInputSite(placeName, index, lat, lon) {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -229,29 +248,17 @@ class TripPlanner {
 
     /**
      * Handle the change of state of the checkboxes (checked or unchecked) for the selected activities. Update lists of selected activities and their coordinates, manage markers on the map and shows an error if the 10 selected activities are exceeded
-     * @param {HTMLInputElement} checkbox 
-     * @param {string} placeName 
-     * @param {number} lat 
-     * @param {number} lon 
-     * @param {number} index 
+     * @param {HTMLInputElement} checkbox of the activity
+     * @param {string} placeName of the activity
+     * @param {number} lat of the activity site
+     * @param {number} lon of the activity
      */
-    handleCheckboxChange(checkbox, placeName, lat, lon, index) {
+    handleCheckboxChange(checkbox, placeName, lat, lon) {
         if (checkbox.checked) {
-            if (this.selectedPlaces.length < 10) {
-                this.selectedPlaces.push(placeName);
-                this.activitiesCoordinates.push({ lat, lon, name: placeName });
-                this.mapHandler.addActivityMarker(lat, lon, placeName, this.selectedPlaces.length); // Usar la longitud actual como índice
-                this.selectionError.style.display = 'none';
-            } else {
-                checkbox.checked = false;
-                this.selectionError.style.display = 'block';
-            }
+            this.limitActivityList(placeName, lat, lon, checkbox);
         } else {
-            const idx = this.selectedPlaces.indexOf(placeName);
-            if (idx > -1) {
-                this.selectedPlaces.splice(idx, 1);
-                this.activitiesCoordinates = this.activitiesCoordinates.filter(coord => coord.name !== placeName);
-            }
+            const positionPlace = this.selectedPlaces.indexOf(placeName);
+            this.removePlace(positionPlace, placeName);
             this.selectionError.style.display = 'none';
             this.mapHandler.removeActivityMarkers();
 
@@ -261,6 +268,25 @@ class TripPlanner {
         }
 
         this.planTripBtn.disabled = this.selectedPlaces.length === 0;
+    }
+
+    removePlace(positionPlace, placeName) {
+        if (positionPlace > -1) {
+            this.selectedPlaces.splice(positionPlace, 1);
+            this.activitiesCoordinates = this.activitiesCoordinates.filter(coord => coord.name !== placeName);
+        }
+    }
+
+    limitActivityList(placeName, lat, lon, checkbox) {
+        if (this.selectedPlaces.length < 10) {
+            this.selectedPlaces.push(placeName);
+            this.activitiesCoordinates.push({ lat, lon, name: placeName });
+            this.mapHandler.addActivityMarker(lat, lon, placeName, this.selectedPlaces.length);
+            this.selectionError.style.display = 'none';
+        } else {
+            checkbox.checked = false;
+            this.selectionError.style.display = 'block';
+        }
     }
 
     /**

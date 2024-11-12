@@ -19,14 +19,18 @@ class ImagesCarousel {
             const data = await response.json();
             this.images = data.photos.map(photo => photo.src.medium);
 
-            if (this.images.length > 0) {
-                this.displayImage();
-                this.addEventListeners();
-            } else {
-                this.showNoImagesMessage();
-            }
+            this.showImages();
         } catch (error) {
             console.error("Error loading images:", error);
+            this.showNoImagesMessage();
+        }
+    }
+    
+    showImages() {
+        if (this.images.length > 0) {
+            this.displayImage();
+            this.addEventListeners();
+        } else {
             this.showNoImagesMessage();
         }
     }
