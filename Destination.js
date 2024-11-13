@@ -96,7 +96,8 @@ class Destination {
             "Spanish": "Español",
             "French": "Francés",
             "German": "Alemán",
-            "Portuguese": "Portugués"
+            "Portuguese": "Portugués",
+            "Dutch": "Holandés"
         };
         return languagesInSpanish[language] || language;
     }
