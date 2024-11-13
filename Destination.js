@@ -57,9 +57,12 @@ class Destination {
     }
 
     /**
-     Gets a country's language and currency information from the Rest Countries API
-     * @param {string} country name to obtain the information
-     * @returns the language and currency in Spanish if it finds the country, otherwise it returns "No disponible" for both.
+     * Gets a country's language and currency information from the Rest Countries API
+     * @param {string} country - name of the country to obtain the information 
+     * @returns {Promise<Object>} an object that contains the language and currency in Spanish if it finds the country, otherwise it returns "Not available" for both
+     * @property {string} language - the official language of the country in spanish. If the country has no data available, it returns "not available"
+     * @property {string} currency - the official currency of the country in spanish. If the country has no data available, it returns "not available"
+     * @throws {Error} throw an error if a problem occurs with the country data request
      */
     async getCountryData(country) {
         if (!country) return { language: "No disponible", currency: "No disponible" };
@@ -83,9 +86,9 @@ class Destination {
 
 
     /**
-     Translates an english language name to its equivalent in spanish
-     * @param {string} language name in english 
-     * @returns the name of the language in spanish
+     * Translates an english language name to its equivalent in spanish. If the language is not in the list, it returns the original untranslated name
+     * @param {string} language - the name of the english language that you want to translate into spanish 
+     * @returns {String} the name of the language in spanish, or the original name if a translation cannot be found
      */
     getLanguageInSpanish(language) {
         const languagesInSpanish = {
@@ -99,9 +102,9 @@ class Destination {
     }
 
     /**
-     Convert the name of a currency in english to its equivalent in spanish
-     * @param {string} currency name in english that you want to convert to spanish 
-     * @returns the name of the currency in spanish
+     * Translates the name of a currency into spanish if it exists in the predefined set of currencies. If the currency is not in the list, it returns the original untranslated name.
+     * @param {string} currency - the name of the currency in english that you want to translate into spanish 
+     * @returns {String} The name of the currency in spanish, or the original name if a translation cannot be found
      */
     getCurrencyInSpanish(currency) {
         const currenciesInSpanish = {
@@ -118,8 +121,12 @@ class Destination {
     }
 
     /**
-     Display a summary of the destination taken from Wikipedia and information about the language and currency
-     * @param {string} param0 the official language and official currency of the destination in spanish
+     * Gets a Wikipedia summary for the specified destination and displays it in the user interface. If the summary cannot be obtained, displays an alternative message
+     * @param {Object} params - an object that contains language and currency information
+     * @param {String} params.language - the official language of the destination
+     * @param {String} params.currency - the official currency of the destination
+     * @returns {void} Does not return any value; updates the HTML content of the page
+     * @throws {Error} Throw an error if a problem occurs while getting the Wikipedia summary
      */
     async displaySummary({ language, currency }) {
         try {
