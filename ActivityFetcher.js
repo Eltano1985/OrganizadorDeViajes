@@ -1,7 +1,7 @@
 class ActivityFetcher {
 
     /**
-    Gets a list of up to 15 activities or places of interest near a specific destination using the Foursquare API
+     * Gets a list of up to 15 activities or places of interest near a specific destination using the Foursquare API
      * @param {string} destination - place of interest
      * @returns up to 15 activities or places of interest
      */
