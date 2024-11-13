@@ -6,8 +6,9 @@ class Destination {
     }
 
     /**
-     Loads data for the selected destination, including the destination name, corresponding country, additional information, and a carousel of images 
-     * @returns empty when destination is not entered
+     * Loads data for the selected destination, including the destination name, corresponding country, additional information, and a carousel of images
+     * @returns {Promise<void>} updates the user interface with destination information
+     * @throws {Error} it can throw errors in internally called functions like `getCountry`, `getCountryData`, and `displaySummary`
      */
     async loadDestinationData() {
         if (!this.name) {
@@ -25,7 +26,8 @@ class Destination {
     }
 
     /**
-     Display the target name in two DOM elements
+     * Display the target name in two DOM elements. Updates the text content of elements with ID 'destination-title' and 'destination-title2' with the value of `this.name`
+     * @returns {void} does not return any value; it only updates the user interface
      */
     displayDestinationName() {
         document.getElementById('destino-titulo').innerText = this.name;
@@ -33,8 +35,9 @@ class Destination {
     }
 
     /**
-     Gets the country name corresponding to the destination using the GeoNames API
-     * @returns the country name if found, or "null" if an error occurs while fetching the data
+     * Gets the country name corresponding to the destination using the GeoNames API
+     * @returns {Promise<string/null>} a promise that resolves to the country name if it is found, or `null` if an error occurs or the city is not found
+     * @throws {Error} Throw an error if a problem occurs with the API or if the city does not exist in the GeoNames data
      */
     async getCountry() {
         const url = `http://api.geonames.org/searchJSON?q=${encodeURIComponent(this.name)}&maxRows=1&username=${this.geoNamesUsername}`;

@@ -2,7 +2,7 @@ class ActivityFetcher {
 
     /**
     Gets a list of up to 15 activities or places of interest near a specific destination using the Foursquare API
-     * @param {string} destination place of interest
+     * @param {string} destination - place of interest
      * @returns up to 15 activities or places of interest
      */
     static fetchActivities(destination) {
@@ -21,7 +21,7 @@ class ActivityFetcher {
                 }
                 return response.json();
             })
-            .then(data => data.results) // Asegúrate de que el resultado sea un array de lugares
+            .then(data => data.results)
             .catch(error => {
                 console.error('Error al obtener las actividades:', error);
                 throw new Error('Ocurrió un error al obtener los sitios de interés.');
