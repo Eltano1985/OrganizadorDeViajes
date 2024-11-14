@@ -58,7 +58,7 @@ main {
 
 /* Ajustes específicos para el mapa */
 #map-section {
-  flex: 1.5; /* Dale más espacio al mapa */
+  flex: 1.5;
 }
 
 #map {
