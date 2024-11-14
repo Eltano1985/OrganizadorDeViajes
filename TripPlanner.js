@@ -17,7 +17,8 @@ class TripPlanner {
     }
 
     /**
-     * Adds event handlers to key elements: the trip planning form, the destination field and the more Information button
+     * Binds event listeners to various interface elements. Configures event listeners for the following interactions: the form submit event is handled by `handleFormSubmit` when the user submits the form, the `blur` event on the destination input triggers the `geocodeDestination` function to process the entered value, and the "More Info" button click event triggers the "showMoreInfo" function to display additional information
+     * @returns {void}
      */
     bindEvents() {
         this.form.addEventListener('submit', (event) => this.handleFormSubmit(event));
@@ -26,9 +27,9 @@ class TripPlanner {
     }
 
     /**
-     * Validates the input fields and checks if there is at least one activity selected. If all data is valid, store the destination in localStorage. Create a new item in the itinerary, and restart the form. In case of missing data or activities, it shows alerts to the user
-     * @param {event} event 
-     * @returns empty at the end of validation
+     * Responsible for sending the trip planning form. This feature bypasses the default form submission behavior, validating input fields to ensure all required information is provided (destination, start date, end date, and selected activities). If any fields are missing, an alert is displayed. If the input is valid, the destination is saved to "localStorage", an itinerary item is created with the selected information, and the activity list is updated
+     * @param {Event} event - The submit event triggered by the form
+     * @returns {void}
      */
     handleFormSubmit(event) {
         event.preventDefault();
@@ -42,21 +43,18 @@ class TripPlanner {
             alert("Por favor, completa todos los campos antes de planificar el viaje.");
             return;
         }
-
         if (this.selectedPlaces.length === 0) {
             alert("Por favor, selecciona al menos una actividad.");
             return;
         }
-
         localStorage.setItem('destination', destination);
-
         this.createItineraryItem(destination, startDate, endDate, selectedActivities);
-
         this.refreshActivityList();
     }
     
     /**
-     * Reset the list of activities
+     * Resets the activity list and clears the form fields. This function performs the following actions: resets the form fields to their default values, clears the list of activities displayed in the user interface, disables the "Plan Trip" button to prevent further actions, and clears the selected places and arrays of activity coordinates to reset the state
+     * @returns {void}
      */
     refreshActivityList() {
         this.form.reset();
@@ -67,11 +65,12 @@ class TripPlanner {
     }
 
     /**
-     * Creates an itinerary element that includes the destination, start and end date (in "DD/MM/YYYY" format), and a numbered list of selected activities. Adds a button to delete the created itinerary
-     * @param {string} destination 
-     * @param {string} startDate 
-     * @param {string} endDate 
-     * @param {Array<string>} activities 
+     * Creates and adds a new itinerary item to the itinerary list. This function creates a new `div` element to represent a single itinerary item, formats the start and end dates, generates an HTML list of selected activities and adds the item to the itinerary list. It also sets an event listener on the Delete button to remove the item from the itinerary when it is clicked
+     * @param {string} destination - The destination of the trip
+     * @param {string} startDate - The start date of the trip
+     * @param {string} endDate - The end date of the trip
+     * @param {string} activities - A list of activities for the trip
+     * @returns {void}
      */
     createItineraryItem(destination, startDate, endDate, activities) {
         const itineraryItem = document.createElement('div');
@@ -91,9 +90,9 @@ class TripPlanner {
     }
 
     /**
-     * Formats the date in day, month and year
-     * @param {string} dateString 
-     * @returns returns the date in DD/MM/YYYY
+     * Formats a date string in the format "DD/MM/YYYY". This function takes a date string, converts it to a "Date" object, and then formats it to a string in the format "DD/MM/YYYY". If the day or month is a single digit, add a leading zero
+     * @param {string} dateString - The date string to format
+     * @returns {string} the formatted date string in the format "DD/MM/YYYY"
      */
     formatDate(dateString) {
         const date = new Date(dateString);
@@ -104,12 +103,13 @@ class TripPlanner {
     }
 
     /**
-     * Create a travel card with the list of activities
-     * @param {HTMLElement} itineraryItem 
-     * @param {string} destination 
-     * @param {string} formattedStartDate 
-     * @param {string} formattedEndDate 
-     * @param {string} activitiesListHtml 
+     * This function creates an HTML structure for a travel card, inserting the destination, start and end dates, and a list of selected activities into the itinerary element. It also adds a delete button to allow deletion of the item from the itinerary
+     * @param {HTMLElement} itineraryItem - The HTML element representing the itinerary item to be populated
+     * @param {string} destination - The destination of the trip
+     * @param {string} formattedStartDate The formatted start date of the trip (in "DD/MM/YYYY" format)
+     * @param {string} formattedEndDate - The formatted end date of the trip (in "DD/MM/YYYY" format)
+     * @param {string} activitiesListHtml - The HTML string representing the list of selected activities
+     * @returns {void}
      */
     createTripCard(itineraryItem, destination, formattedStartDate, formattedEndDate, activitiesListHtml) {
         itineraryItem.innerHTML = `
