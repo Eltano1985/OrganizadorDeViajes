@@ -198,14 +198,9 @@ class TripPlanner {
             const placeName = place.name;
             const lat = place.geocodes.main.latitude;
             const lon = place.geocodes.main.longitude;
-
             const checkbox = this.createInputSite(placeName, index, lat, lon);
-
             const label = this.createLabelSite(index, placeName);
-
-            this.insertSite(checkbox, label);
-
-            
+            this.insertSite(checkbox, label);            
         });
     }
     
