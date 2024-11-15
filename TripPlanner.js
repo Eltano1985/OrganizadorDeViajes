@@ -69,10 +69,9 @@ class TripPlanner {
      * @param {string} destination - The destination of the trip
      * @param {string} startDate - The start date of the trip
      * @param {string} endDate - The end date of the trip
-     * @param {string} activities - A list of activities for the trip
      * @returns {void}
      */
-    createItineraryItem(destination, startDate, endDate, activities) {
+    createItineraryItem(destination, startDate, endDate) {
         const itineraryItem = document.createElement('div');
         itineraryItem.classList.add('itinerary-item');
 
