@@ -124,7 +124,9 @@ class TripPlanner {
 
     /**
      * Geocodes the name of a destination to obtain its latitude and longitude. Use the Nominatim API to find the destination coordinates. If coordinates are found, center the map on the location and add a marker. It also clears the list of previous activities and loads activity images
-     * @param {string} destination 
+     * @param {string} destination - The name of the destination to be geocoded
+     * @returns {void} If the destination is found, call the `addMapPosition` method to add the marker to the map. If the destination is not found: Display an alert stating "Destination not found"
+     * @throws {Error} Displays an alert stating "an error occurred while trying to find the location"
      */
     geocodeDestination(destination) {
         const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destination)}`;
@@ -147,8 +149,9 @@ class TripPlanner {
 
     /**
      * Adds the position on the map and displays a marker at the destination. Then, clears the activity list and uploads new activity images for the destination
-     * @param {Array<Object>} data 
-     * @param {string} destination 
+     * @param {Array<Object>} data - Data returned by the Geocoding API, including geographic coordinates*
+     * @param {string} destination - The name of the destination associated with the coordinates
+     * @returns {void}
      */
     addMapPosittion(data, destination) {
         const lat = data[0].lat;
@@ -160,8 +163,10 @@ class TripPlanner {
     }
 
     /**
-     * Obtains and displays places of interest related to a destination. Updates the list of activities with a load message, then fetches the activities using the `ActivityFetcher` class. If activities are found, it displays them; If not, it displays a message indicating that there are no results
-     * @param {string} destination 
+     * Gets and displays places of interest related to a destination. Updates the list of activities with a load message, then fetches the activities using the `ActivityFetcher` class. If activities are found, it displays them; If not, it displays a message indicating that there are no results
+     * @param {string} destination - The name of the destination to search for places of interest
+     * @returns {void}
+     * @throws {Error} Error in API request: Displays a message in the interface with the error that occurred
      */
     fetchActivitiesImages(destination) {
         this.activitiesList.innerHTML = '<p>Cargando sitios de interés...</p>';
@@ -182,8 +187,9 @@ class TripPlanner {
     }
 
     /**
-     * Displays places of interest in the activities list and adds checkboxes so the user can select specific activities. Update the coordinates of the activities and establish event listeners for each box
-     * @param {Array<Object>} places 
+     * Takes a list of places of interest and clears the current list of coordinates stored in `this.activitiesCoordinates`. Iterates over each site in the list and dynamically generates HTML elements to display a checkbox for selecting the site and a label with the name of the site. Inserts these elements into the interface using `insertSite`.
+     * @param {Array<Object>} places - List of places of interest, where each place contains information such as name and geographic coordinates
+     * @returns {void}
      */
     displayInterestSites(places) {
         this.activitiesCoordinates = [];
@@ -205,8 +211,9 @@ class TripPlanner {
     
     /**
      * This function creates a `div` container for a site of interest and then adds the `checkbox` and `label` elements to the container. Finally, it inserts the container into the activity list
-     * @param {HTMLElement} checkbox 
-     * @param {HTMLElement} label 
+     * @param {HTMLElement} checkbox - Checkbox input element to select the site
+     * @param {HTMLElement} label - Label associated with the checkbox that displays the name of the site
+     * @returns {void}
      */
     insertSite(checkbox, label) {
         const div = document.createElement('div');
@@ -218,9 +225,9 @@ class TripPlanner {
     
     /**
      * Creates and returns a label element for a location of interest
-     * @param {number} index 
-     * @param {string} placeName 
-     * @returns {HTMLLabelElement}
+     * @param {number} index - Unique index that identifies the site, used to associate the `label` with an input element.
+     * @param {string} placeName - Nombre del sitio de interés que se mostrará en la etiqueta
+     * @returns {HTMLLabelElement} The `label` element set with the corresponding text and `htmlFor` attribute
      */
     createLabelSite(index, placeName) {
         const label = document.createElement('label');
@@ -231,11 +238,11 @@ class TripPlanner {
 
     /**
      * Creates an `input` checkbox configured with a unique ID and a value corresponding to the site name. A `change` event is also added to it that calls `handleCheckboxChange` when its selected state is changed.
-     * @param {string} placeName 
-     * @param {number} index 
-     * @param {number} lat 
-     * @param {number} lon 
-     * @returns {HTMLInputElement}
+     * @param {string} placeName - Name of the site of interest, which will be used as the value of the checkbox
+     * @param {number} index - Unique index that identifies the checkbox and associates its ID with a `label`
+     * @param {number} lat - Latitude of the site of interest, used to manage selections
+     * @param {number} lon - Longitude of the site of interest, used to drive selections
+     * @returns {HTMLInputElement} The checkbox-type `input` element configured with the corresponding values ​​and events
      */
     createInputSite(placeName, index, lat, lon) {
         const checkbox = document.createElement('input');
@@ -247,11 +254,12 @@ class TripPlanner {
     }
 
     /**
-     * Handle the change of state of the checkboxes (checked or unchecked) for the selected activities. Update lists of selected activities and their coordinates, manage markers on the map and shows an error if the 10 selected activities are exceeded
-     * @param {HTMLInputElement} checkbox of the activity
-     * @param {string} placeName of the activity
-     * @param {number} lat of the activity site
-     * @param {number} lon of the activity
+     * If the checkbox is selected it calls `limitActivityList` to add the site to the selected list and manage restrictions. If the checkbox is deselected it removes the site from the selected list and from the map, restores the markers of the remaining sites on the map, hides possible selection error messages and enables or disables the "Plan Trip" button (`planTripBtn`) depending on if there are selected sites
+     * @param {HTMLInputElement} checkbox - The checkbox that changed state (selected or deselected)
+     * @param {string} placeName - Name of the site of interest associated with the checkbox
+     * @param {number} lat - Latitude of the site of interest
+     * @param {number} lon - Longitude of site of interest
+     * @returns {void}
      */
     handleCheckboxChange(checkbox, placeName, lat, lon) {
         if (checkbox.checked) {
@@ -266,10 +274,15 @@ class TripPlanner {
                 this.mapHandler.addActivityMarker(coord.lat, coord.lon, coord.name, i + 1)
             );
         }
-
         this.planTripBtn.disabled = this.selectedPlaces.length === 0;
     }
 
+    /**
+     * Removes a site from both the list (selectedPlaces) and the list of coordinates (activitiesCoordinates). Checks if the given index (`positionPlace`) is valid. If the index is valid (greater than -1), remove the site from the list of selected places. Filters the list of coordinates (`activitiesCoordinates`) to exclude those associated with the deleted site
+     * @param {number} positionPlace - Site index in the list of selected places (`selectedPlaces`)
+     * @param {string} placeName - Name of the site of interest to be deleted
+     * @returns {void}
+     */
     removePlace(positionPlace, placeName) {
         if (positionPlace > -1) {
             this.selectedPlaces.splice(positionPlace, 1);
@@ -277,6 +290,14 @@ class TripPlanner {
         }
     }
 
+    /**
+     * Controls the maximum number of places of interest that can be added to the selected list (`selectedPlaces`). If the list contains fewer than 10 sites add the site name to `selectedPlaces`, add the site coordinates to `activitiesCoordinates`, call `mapHandler.addActivityMarker` to display a site marker on the map, and hide any error messages selection (`selectionError`). If there are already 10 sites selected, uncheck the checkbox associated with the site and display an error message indicating that the limit has been reached.
+     * @param {string} placeName - Name of the site of interest you are trying to add to the list 
+     * @param {number} lat - Latitude of the site of interest
+     * @param {number} lon - Longitude of site of interest
+     * @param {HTMLInputElement} checkbox The checkbox associated with the site, which can be unchecked if the limit is reached
+     * @returns {void}
+     */
     limitActivityList(placeName, lat, lon, checkbox) {
         if (this.selectedPlaces.length < 10) {
             this.selectedPlaces.push(placeName);
@@ -290,15 +311,17 @@ class TripPlanner {
     }
 
     /**
-     * Redirects the user to the more information page
+     * Change the current browser location to the `masinformacion.html` page. Use `window.location.href` to redirect the user to the more information page
+     * @returns {void}
      */
     showMoreInfo() {
         window.location.href = 'masinformacion.html';
     }
 
     /**
-     * Removes the itinerary item from the activity list, removes the map marker if it exists, and resets the map marker variable to `null`.
-     * @param {HTMLElement} itineraryItem 
+     * Removes the element from the DOM itinerary using the `remove()` method. If there is a marker on the map (referenced by `mapHandler.marker`), it removes it from the map. After deleting the marker, the `mapHandler.marker` property is set to `null` to indicate that there is no active marker
+     * @param {HTMLElement} itineraryItem - The DOM element that represents the itinerary item to delete
+     * @returns {void}
      */
     deleteItinerary(itineraryItem) {
         itineraryItem.remove();
