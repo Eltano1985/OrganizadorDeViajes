@@ -1,3 +1,5 @@
+import ImagesCarousel from "./ImagesCarousel.js";
+
 class Destination {
     constructor(name) {
         this.name = name;
@@ -21,7 +23,7 @@ class Destination {
         const countryData = await this.getCountryData(country);
 
         await this.displaySummary(countryData);
-        const imageCarousel = new ImageCarousel(this.name, this.pexelsApiKey);
+        const imageCarousel = new ImagesCarousel(this.name, this.pexelsApiKey);
         imageCarousel.loadImages();
     }
 
