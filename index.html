@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planificador de Viajes</title>
-    <link rel="stylesheet" href="estilos.css"> <!-- Enlace a tu archivo CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" /> <!-- CSS de Leaflet -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script> <!-- QRCode.js -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/assets/owl.carousel.css"> <!-- CSS de Owl Carousel -->
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/assets/owl.carousel.css"> 
 </head>
 <body>
     <header>
         <div class="header-container">
             <h1>Planificador de Viajes</h1>
-            <div id="qr-code"></div> <!-- Contenedor para el QR Code -->
+            <div id="qr-code"></div> 
         </div>
     </header>
     <main>
@@ -34,24 +34,24 @@
                         <label for="end-date">Fecha de Llegada</label>
                         <input type="date" id="end-date" name="end-date" required aria-label="Fecha de Llegada" onfocus="this.setAttribute('min', document.getElementById('start-date').value);">
                     </div>
-                    <div style="display: flex; gap: 10px;"> <!-- Contenedor flex para los botones -->
+                    <div style="display: flex; gap: 10px;"> 
                         <button id="plan-trip-btn" type="submit" disabled>Planificar Viaje</button>
-                        <button id="more-info-btn" type="button" aria-label="Más información">Más información</button> <!-- Botón Más información -->
+                        <button id="more-info-btn" type="button" aria-label="Más información">Más información</button> 
                     </div>
                 </form>
-                <div id="itinerary-list"></div> <!-- Lista de itinerarios -->
+                <div id="itinerary-list"></div> 
             </div>
 
             <div id="activities-section">
                 <h2>Actividades sugeridas</h2>
-                <div id="activities-list"></div> <!-- Contenedor para las actividades -->
+                <div id="activities-list"></div> 
                 <div id="selection-error" style="display: none; color: red;">Has alcanzado el límite de 10 actividades.</div>
-                <div id="image-carousel" class="owl-carousel"></div> <!-- Carrusel de imágenes -->
+                <div id="image-carousel" class="owl-carousel"></div> 
             </div>
 
             <div id="map-section">
                 <h2>Mapa</h2>
-                <div id="map" style="height: 400px;"></div> <!-- Establecer altura para el mapa -->
+                <div id="map" style="height: 400px;"></div> 
             </div>
         </div>
     </main>
@@ -59,27 +59,26 @@
         <p>© 2024 Planificador de Viajes</p>
     </footer>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> <!-- JS de Leaflet -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js"></script> <!-- JS de Owl Carousel -->
-    <script type="module" src="TravelOrganizer.js"></script> <!-- Enlace a tu archivo JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js"></script> 
+    <script type="module" src="TravelOrganizer.js"></script> 
     <script>
-        // Generar el código QR cuando se carga la página
+        
         $(document).ready(function() {
-            const appUrl = "https://eltano1985.github.io/OrganizadorDeViajes/"; // Cambia esta URL a la dirección de tu aplicación
+            const appUrl = "https://eltano1985.github.io/OrganizadorDeViajes/"; 
             $("#qr-code").qrcode({
                 text: appUrl,
-                width: 128, // Ancho del código QR
-                height: 128 // Alto del código QR
+                width: 128, 
+                height: 128 
             });
             
-            // Redirigir a la nueva página de información con el destino seleccionado
             $('#more-info-btn').on('click', function() {
-                const destino = $('#destination').val(); // Obtiene el destino ingresado
+                const destino = $('#destination').val(); 
                 if (destino) {
-                    localStorage.setItem('destinoSeleccionado', destino); // Guarda el destino en localStorage
-                    window.location.href = 'moreinformation.html'; // Redirige a la página secundaria
+                    localStorage.setItem('destinoSeleccionado', destino); 
+                    window.location.href = 'moreinformation.html'; 
                 } else {
-                    alert("Por favor, ingresa un destino antes de continuar."); // Alerta si no hay destino
+                    alert("Por favor, ingresa un destino antes de continuar.");
                 }
             });
         });
